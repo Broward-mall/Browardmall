@@ -112,11 +112,11 @@ function generateCertificatePDF(store: any): Promise<Buffer> {
   });
 }
 
-async function startServer() {
-  const app = express();
-  const PORT = 3000;
+const app = express();
+app.use(express.json());
 
-  app.use(express.json());
+async function startServer() {
+  const PORT = 3000;
 
   // API ROUTE 1: Owner Email Verification
   app.post("/api/verify-owner", async (req, res) => {
@@ -422,9 +422,14 @@ async function startServer() {
     });
   }
 
-  app.listen(PORT, "0.0.0.0", () => {
-    console.log(`Full-Stack dev server online at http://localhost:${PORT}`);
-  });
+  if (!process.env.VERCEL) {
+    app.listen(PORT, "0.0.0.0", () => {
+      console.log(`Full-Stack dev server online at http://localhost:${PORT}`);
+    });
+  }
 }
 
 startServer();
+
+export { app };
+export default app;
