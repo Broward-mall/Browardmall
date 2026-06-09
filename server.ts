@@ -1,7 +1,6 @@
 import "dotenv/config";
 import express from "express";
 import path from "path";
-import { createServer as createViteServer } from "vite";
 import PDFDocument from "pdfkit";
 
 // Rate limiting state
@@ -197,11 +196,8 @@ function generateCertificatePDF(store: any): Promise<Buffer> {
 const app = express();
 app.use(express.json());
 
-async function startServer() {
-  const PORT = 3000;
-
-  // API ROUTE 1: Owner Email Verification
-  app.post("/api/verify-owner", async (req, res) => {
+// API ROUTE 1: Owner Email Verification
+app.post("/api/verify-owner", async (req, res) => {
     const ip = req.ip || "unknown-ip";
     if (!checkRateLimit(ip)) {
       return res.status(429).json({ error: "Too many requests. Please try again later." });
@@ -475,29 +471,38 @@ async function startServer() {
     }
   });
 
-  // Vite Integration & SPA Serving
-  if (process.env.NODE_ENV !== "production") {
-    const vite = await createViteServer({
-      server: { middlewareMode: true },
-      appType: "spa"
-    });
-    app.use(vite.middlewares);
-  } else {
-    const distPath = path.join(process.cwd(), "dist");
-    app.use(express.static(distPath));
-    app.get("*", (req, res) => {
-      res.sendFile(path.join(distPath, "index.html"));
-    });
-  }
+// Vite Integration & SPA Serving
+if (process.env.NODE_ENV === "production") {
+  const distPath = path.join(process.cwd(), "dist");
+  app.use(express.static(distPath));
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(distPath, "index.html"));
+  });
+}
 
-  if (!process.env.VERCEL) {
+async function configureViteDev() {
+  const { createServer: createViteServer } = await import("vite");
+  const vite = await createViteServer({
+    server: { middlewareMode: true },
+    appType: "spa"
+  });
+  app.use(vite.middlewares);
+}
+
+if (!process.env.VERCEL) {
+  const PORT = 3000;
+  if (process.env.NODE_ENV !== "production") {
+    configureViteDev().then(() => {
+      app.listen(PORT, "0.0.0.0", () => {
+        console.log(`Full-Stack dev server online at http://localhost:${PORT}`);
+      });
+    });
+  } else {
     app.listen(PORT, "0.0.0.0", () => {
       console.log(`Full-Stack dev server online at http://localhost:${PORT}`);
     });
   }
 }
-
-startServer();
 
 export { app };
 export default app;
