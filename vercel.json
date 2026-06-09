@@ -4,6 +4,10 @@
     {
       "source": "/api/:path*",
       "destination": "/api"
+    },
+    {
+      "source": "/((?!api/|api$).*)",
+      "destination": "/index.html"
     }
   ]
 }

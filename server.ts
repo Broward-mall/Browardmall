@@ -85,7 +85,9 @@ async function getStoreByTrackingCodeRest(cleanCode: string): Promise<any | null
   });
 
   if (!response.ok) {
-    throw new Error(`Firestore REST API returned status ${response.status}`);
+    const errorText = await response.text();
+    console.error(`Firestore REST API returned status ${response.status}: ${errorText}`);
+    throw new Error(`Firestore REST API returned status ${response.status}: ${errorText}`);
   }
 
   const results = await response.json();
@@ -296,7 +298,7 @@ app.post("/api/verify-owner", async (req, res) => {
       return res.send(pdfBuffer);
     } catch (err: any) {
       console.error("PDF download error:", err);
-      return res.status(500).json({ error: "An internal error occurred." });
+      return res.status(500).json({ error: `Verification failed. Error: ${err.message || err}` });
     }
   });
 
@@ -467,7 +469,7 @@ app.post("/api/verify-owner", async (req, res) => {
       return res.json({ success: true, message: successMessage });
     } catch (err: any) {
       console.error("Email service error:", err);
-      return res.status(500).json({ error: "Verification failed. Please check your information and try again." });
+      return res.status(500).json({ error: `Verification failed. Error: ${err.message || err}` });
     }
   });
 
