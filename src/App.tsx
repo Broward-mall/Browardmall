@@ -25,24 +25,32 @@ export default function App() {
   const [malls, setMalls] = useState<Mall[]>([]);
   const [landingSettings, setLandingSettings] = useState<LandingPageSettings>(DEFAULT_LANDING_SETTINGS);
 
-  // Hash Router setup
+  // Unified Router setup - supporting both clean paths (e.g. /admin/login) and hash backups (e.g. /#/admin/login)
   useEffect(() => {
-    const handleHashChange = () => {
-      const hash = window.location.hash.replace(/^#\/?/, '');
-      setCurrentRoute(hash);
+    const handleUrlChange = () => {
+      const hash = window.location.hash;
+      if (hash && hash !== '#' && hash !== '#/') {
+        setCurrentRoute(hash.replace(/^#\/?/, ''));
+        return;
+      }
+      const path = window.location.pathname;
+      setCurrentRoute(path.replace(/^\/+/, '').replace(/\/+$/, ''));
     };
 
-    window.addEventListener('hashchange', handleHashChange);
-    handleHashChange(); // trigger initially
+    window.addEventListener('hashchange', handleUrlChange);
+    window.addEventListener('popstate', handleUrlChange);
+    handleUrlChange(); // trigger initially
 
     return () => {
-      window.removeEventListener('hashchange', handleHashChange);
+      window.removeEventListener('hashchange', handleUrlChange);
+      window.removeEventListener('popstate', handleUrlChange);
     };
   }, []);
 
-  // Navigate Helper updating browser location hash
+  // Navigate Helper supporting clean HTML5 History URL transitions
   const handleNavigate = (route: string) => {
-    window.location.hash = `/${route}`;
+    const targetUrl = route ? `/${route}` : '/';
+    window.history.pushState({}, '', targetUrl);
     setCurrentRoute(route);
   };
 
