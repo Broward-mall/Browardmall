@@ -218,9 +218,12 @@ export async function seedDatabaseIfNeeded() {
       
       SEED_STORES.forEach((store) => {
         const docRef = doc(collection(db, 'stores'));
+        const associatedMall = SEED_MALLS.find((m) => m.id === store.mallId);
         batch.set(docRef, {
           ...store,
           id: docRef.id,
+          lat: associatedMall ? associatedMall.lat : 26.1224,
+          lng: associatedMall ? associatedMall.lng : -80.2528,
           createdAt: new Date().toISOString()
         });
       });

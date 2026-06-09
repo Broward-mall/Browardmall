@@ -118,7 +118,8 @@ service cloud.firestore {
              store.trackingCode is string && store.trackingCode.size() <= 20 &&
              store.sizeSqFt is number && store.sizeSqFt > 0 &&
              store.monthlyLease is number && store.monthlyLease > 0 &&
-             store.lat is number && store.lng is number;
+             (!('lat' in store) || store.lat is number) &&
+             (!('lng' in store) || store.lng is number);
     }
 
     function isValidSetting(setting) {
