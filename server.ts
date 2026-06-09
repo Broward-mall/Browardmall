@@ -1,8 +1,6 @@
 import express from "express";
 import path from "path";
 import { createServer as createViteServer } from "vite";
-import { initializeApp } from "firebase/app";
-import { getFirestore, collection, query, where, getDocs, addDoc } from "firebase/firestore";
 import PDFDocument from "pdfkit";
 
 // Rate limiting state
@@ -27,18 +25,101 @@ function checkRateLimit(ip: string, limit = 5, windowMs = 5 * 1000 * 60) {
   return true;
 }
 
-// Initialize Firebase App for server-side queries
-const firebaseConfig = {
-  apiKey: process.env.VITE_FIREBASE_API_KEY || "AIzaSyCtxNaHJCRQXNemlTXmNIJ3jG1GF7A7ha8",
-  authDomain: process.env.VITE_FIREBASE_AUTH_DOMAIN || "broward-8e8f1.firebaseapp.com",
-  projectId: process.env.VITE_FIREBASE_PROJECT_ID || "broward-8e8f1",
-  storageBucket: process.env.VITE_FIREBASE_STORAGE_BUCKET || "broward-8e8f1.firebasestorage.app",
-  messagingSenderId: process.env.VITE_FIREBASE_MESSAGING_SENDER_ID || "268184581960",
-  appId: process.env.VITE_FIREBASE_APP_ID || "1:268184581960:web:200b2ab15f7207e916657d"
-};
+// Backend-safe Firebase Config (combining VITE_ and server process environment mappings for absolute compatibility)
+const projectId = process.env.VITE_FIREBASE_PROJECT_ID || process.env.FIREBASE_PROJECT_ID || "broward-8e8f1";
+const apiKey = process.env.VITE_FIREBASE_API_KEY || process.env.FIREBASE_API_KEY || "AIzaSyCtxNaHJCRQXNemlTXmNIJ3jG1GF7A7ha8";
 
-const firebaseApp = initializeApp(firebaseConfig);
-const firestoreDb = getFirestore(firebaseApp);
+// Map raw Firestore REST API document fields back into a clean standard JSON object
+function mapFirestoreFields(fields: any) {
+  const result: any = {};
+  if (!fields) return result;
+  for (const [key, value] of Object.entries(fields)) {
+    const val = value as any;
+    if (val.stringValue !== undefined) {
+      result[key] = val.stringValue;
+    } else if (val.doubleValue !== undefined) {
+      result[key] = Number(val.doubleValue);
+    } else if (val.integerValue !== undefined) {
+      result[key] = Number(val.integerValue);
+    } else if (val.booleanValue !== undefined) {
+      result[key] = val.booleanValue;
+    } else if (val.mapValue !== undefined) {
+      result[key] = mapFirestoreFields(val.mapValue.fields);
+    } else if (val.arrayValue !== undefined) {
+      result[key] = (val.arrayValue.values || []).map((item: any) => {
+        if (item.stringValue !== undefined) return item.stringValue;
+        if (item.doubleValue !== undefined) return Number(item.doubleValue);
+        if (item.integerValue !== undefined) return Number(item.integerValue);
+        if (item.booleanValue !== undefined) return item.booleanValue;
+        if (item.mapValue !== undefined) return mapFirestoreFields(item.mapValue.fields);
+        return item;
+      });
+    } else if (val.nullValue !== undefined) {
+      result[key] = null;
+    } else {
+      result[key] = value;
+    }
+  }
+  return result;
+}
+
+// REST-based Firestore helper to run query and return the first matching store (or null)
+async function getStoreByTrackingCodeRest(cleanCode: string): Promise<any | null> {
+  const url = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents:runQuery?key=${apiKey}`;
+  const response = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      structuredQuery: {
+        from: [{ collectionId: "stores" }],
+        where: {
+          fieldFilter: {
+            field: { fieldPath: "trackingCode" },
+            op: "EQUAL",
+            value: { stringValue: cleanCode }
+          }
+        },
+        limit: 1
+      }
+    })
+  });
+
+  if (!response.ok) {
+    throw new Error(`Firestore REST API returned status ${response.status}`);
+  }
+
+  const results = await response.json();
+  if (Array.isArray(results) && results.length > 0 && results[0].document) {
+    const doc = results[0].document;
+    const mapped = mapFirestoreFields(doc.fields);
+    const docName = doc.name || "";
+    const docId = docName.split("/").pop();
+    return { ...mapped, id: docId };
+  }
+  return null;
+}
+
+// REST-based Firestore helper to log an email/download action in 'emailRequests' collection
+async function logEmailRequestRest(cleanCode: string, cleanEmail: string, statusString: string): Promise<any> {
+  const url = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents/emailRequests?key=${apiKey}`;
+  const response = await fetch(url, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      fields: {
+        trackingCode: { stringValue: cleanCode },
+        ownerEmail: { stringValue: cleanEmail },
+        requestDate: { stringValue: new Date().toISOString() },
+        status: { stringValue: statusString }
+      }
+    })
+  });
+
+  if (!response.ok) {
+    const text = await response.text();
+    console.warn("Could not log emailRequest to Firestore:", text);
+  }
+}
 
 // Generate Certificate PDF buffer
 function generateCertificatePDF(store: any): Promise<Buffer> {
@@ -134,17 +215,13 @@ async function startServer() {
       const cleanEmail = email.trim().toLowerCase();
       const cleanCode = trackingCode.trim().toUpperCase();
 
-      // Query Firestore
-      const q = query(collection(firestoreDb, "stores"), where("trackingCode", "==", cleanCode));
-      const querySnapshot = await getDocs(q);
+      // Query Firestore via REST
+      const storeData = await getStoreByTrackingCodeRest(cleanCode);
 
-      if (querySnapshot.empty) {
+      if (!storeData) {
         // Obfuscate failure to prevent account enumeration
         return res.status(404).json({ error: "Verification failed. Please check your information and try again." });
       }
-
-      const storeDoc = querySnapshot.docs[0];
-      const storeData = storeDoc.data();
 
       const storedEmail = (storeData.ownerEmail || "").trim().toLowerCase();
       if (cleanEmail !== storedEmail) {
@@ -154,7 +231,7 @@ async function startServer() {
       // Verification match!
       return res.json({
         success: true,
-        storeId: storeDoc.id,
+        storeId: storeData.id || "",
         storeName: storeData.storeName,
         ownerName: storeData.ownerName,
         trackingCode: storeData.trackingCode
@@ -183,13 +260,13 @@ async function startServer() {
 
       let storeData = null;
 
-      const q = query(collection(firestoreDb, "stores"), where("trackingCode", "==", cleanCode));
-      const querySnapshot = await getDocs(q);
+      try {
+        storeData = await getStoreByTrackingCodeRest(cleanCode);
+      } catch (err) {
+        console.warn("Firestore retrieve failed, seeking storeData fallback:", err);
+      }
 
-      if (!querySnapshot.empty) {
-        const storeDoc = querySnapshot.docs[0];
-        storeData = storeDoc.data();
-      } else if (clientStoreData && clientStoreData.trackingCode && clientStoreData.trackingCode.trim().toUpperCase() === cleanCode) {
+      if (!storeData && clientStoreData && clientStoreData.trackingCode && clientStoreData.trackingCode.trim().toUpperCase() === cleanCode) {
         storeData = clientStoreData;
       }
 
@@ -210,14 +287,9 @@ async function startServer() {
       // Generate the PDF Buffer
       const pdfBuffer = await generateCertificatePDF(storeData);
 
-      // Save audit log matching dynamically (wrap in safe try-catch to prevent offline/restricted Firestore from crashing controller)
+      // Save audit log matching dynamically via REST (wrap in safe try-catch)
       try {
-        await addDoc(collection(firestoreDb, "emailRequests"), {
-          trackingCode: cleanCode,
-          ownerEmail: cleanEmail,
-          requestDate: new Date().toISOString(),
-          status: "success_download"
-        });
+        await logEmailRequestRest(cleanCode, cleanEmail, "success_download");
       } catch (dbErr) {
         console.warn("Could not write emailRequest download log to Firestore (continuing gracefully):", dbErr);
       }
@@ -249,13 +321,13 @@ async function startServer() {
 
       let storeData = null;
 
-      const q = query(collection(firestoreDb, "stores"), where("trackingCode", "==", cleanCode));
-      const querySnapshot = await getDocs(q);
+      try {
+        storeData = await getStoreByTrackingCodeRest(cleanCode);
+      } catch (err) {
+        console.warn("Firestore retrieve failed, seeking storeData fallback:", err);
+      }
 
-      if (!querySnapshot.empty) {
-        const storeDoc = querySnapshot.docs[0];
-        storeData = storeDoc.data();
-      } else if (clientStoreData && clientStoreData.trackingCode && clientStoreData.trackingCode.trim().toUpperCase() === cleanCode) {
+      if (!storeData && clientStoreData && clientStoreData.trackingCode && clientStoreData.trackingCode.trim().toUpperCase() === cleanCode) {
         storeData = clientStoreData;
       }
 
@@ -388,14 +460,9 @@ async function startServer() {
         successMessage = "Database verification matched! However, our email service is restricted in this sandbox environment. You can download your official certificate PDF instantly below.";
       }
 
-      // Logging request in Firestore
+      // Logging request in Firestore via REST
       try {
-        await addDoc(collection(firestoreDb, "emailRequests"), {
-          trackingCode: cleanCode,
-          ownerEmail: cleanEmail,
-          requestDate: new Date().toISOString(),
-          status: statusString
-        });
+        await logEmailRequestRest(cleanCode, cleanEmail, statusString);
       } catch (dbErr) {
         console.warn("Could not write emailRequest send-details log to Firestore (continuing gracefully):", dbErr);
       }
