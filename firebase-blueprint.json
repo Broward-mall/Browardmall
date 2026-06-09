@@ -1,0 +1,199 @@
+{
+  "entities": {
+    "Store": {
+      "title": "Store",
+      "description": "Premium retail store space inside the electronic leasing platform.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "storeName": { "type": "string" },
+        "location": { "type": "string" },
+        "mallName": { "type": "string" },
+        "trackingCode": { "type": "string" },
+        "sizeSqFt": { "type": "number" },
+        "floor": { "type": "string" },
+        "status": { "type": "string", "enum": ["Available", "Sold", "Reserved"] },
+        "utilities": { "type": "boolean" },
+        "parkingSpaces": { "type": "number" },
+        "ceilingHeight": { "type": "string" },
+        "loadingBays": { "type": "number" },
+        "previousTenant": { "type": "string" },
+        "monthlyLease": { "type": "number" },
+        "leaseType": { "type": "string" },
+        "logo": { "type": "string" },
+        "images": { "type": "array" },
+        "lat": { "type": "number" },
+        "lng": { "type": "number" },
+        "isDemo": { "type": "boolean" },
+        "createdAt": { "type": "string" },
+        "isYearlyPayment": { "type": "boolean" },
+        "yearlyPaymentAmount": { "type": "number" },
+        "yearlyExpirationDate": { "type": "string" }
+      },
+      "required": ["storeName", "trackingCode", "sizeSqFt", "monthlyLease", "lat", "lng"]
+    },
+    "Chat": {
+      "title": "Chat",
+      "description": "Visitor live support conversation channel.",
+      "type": "object",
+      "properties": {
+        "visitorId": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "lastActivity": { "type": "string" },
+        "messages": { "type": "array" }
+      },
+      "required": ["visitorId", "createdAt", "lastActivity", "messages"]
+    },
+    "LandingPageSettings": {
+      "title": "LandingPageSettings",
+      "description": "Lander custom branding titles and footer directories.",
+      "type": "object",
+      "properties": {
+        "heroTitle": { "type": "string" },
+        "heroSubtitle": { "type": "string" },
+        "aboutText": { "type": "string" },
+        "contactPhone": { "type": "string" },
+        "contactEmail": { "type": "string" },
+        "contactAddress": { "type": "string" },
+        "socialFb": { "type": "string" },
+        "socialIg": { "type": "string" },
+        "socialTw": { "type": "string" },
+        "faviconUrl": { "type": "string" }
+      },
+      "required": ["heroTitle", "heroSubtitle", "contactPhone", "contactEmail", "contactAddress"]
+    },
+    "EmailRequest": {
+      "title": "EmailRequest",
+      "description": "Logged audit record for owner detail and certificate transmissions.",
+      "type": "object",
+      "properties": {
+        "trackingCode": { "type": "string" },
+        "ownerEmail": { "type": "string" },
+        "requestDate": { "type": "string" },
+        "status": { "type": "string" }
+      },
+      "required": ["trackingCode", "ownerEmail", "requestDate", "status"]
+    },
+    "Offer": {
+      "title": "Offer",
+      "description": "Visitor purchasing and negotiation offers on listed spaces.",
+      "type": "object",
+      "properties": {
+        "storeId": { "type": "string" },
+        "storeName": { "type": "string" },
+        "trackingCode": { "type": "string" },
+        "offerAmount": { "type": "number" },
+        "contactName": { "type": "string" },
+        "phone": { "type": "string" },
+        "message": { "type": "string" },
+        "submittedAt": { "type": "string" }
+      },
+      "required": ["storeId", "trackingCode", "offerAmount", "contactName", "submittedAt"]
+    },
+    "Inquiry": {
+      "title": "Inquiry",
+      "description": "Specific store-linked smart visitor inquiries.",
+      "type": "object",
+      "properties": {
+        "storeId": { "type": "string" },
+        "storeName": { "type": "string" },
+        "trackingCode": { "type": "string" },
+        "visitorEmail": { "type": "string" },
+        "visitorName": { "type": "string" },
+        "message": { "type": "string" },
+        "submittedAt": { "type": "string" }
+      },
+      "required": ["storeId", "trackingCode", "visitorEmail", "visitorName", "message", "submittedAt"]
+    },
+    "Mall": {
+      "title": "Mall",
+      "description": "A commercial mall complex containing store directories.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "location": { "type": "string" },
+        "address": { "type": "string" },
+        "lat": { "type": "number" },
+        "lng": { "type": "number" },
+        "totalStores": { "type": "number" },
+        "image": { "type": "string" }
+      },
+      "required": ["name", "address", "location"]
+    },
+    "AllocationRequest": {
+      "title": "AllocationRequest",
+      "description": "Formal commercial tenant allocation locks submitted by visitors.",
+      "type": "object",
+      "properties": {
+        "fullName": { "type": "string" },
+        "email": { "type": "string" },
+        "phone": { "type": "string" },
+        "offerAmount": { "type": "number" },
+        "notes": { "type": "string" },
+        "storeId": { "type": "string" },
+        "storeName": { "type": "string" },
+        "trackingCode": { "type": "string" },
+        "status": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["fullName", "email", "storeId", "storeName", "trackingCode", "status", "createdAt"]
+    },
+    "NegotiationRequest": {
+      "title": "NegotiationRequest",
+      "description": "Formal pricing proposal / make an offer submission made by visitors.",
+      "type": "object",
+      "properties": {
+        "storeId": { "type": "string" },
+        "storeName": { "type": "string" },
+        "trackingCode": { "type": "string" },
+        "offerAmount": { "type": "number" },
+        "contactName": { "type": "string" },
+        "email": { "type": "string" },
+        "phone": { "type": "string" },
+        "message": { "type": "string" },
+        "status": { "type": "string" },
+        "submittedAt": { "type": "string" }
+      },
+      "required": ["storeId", "storeName", "trackingCode", "offerAmount", "contactName", "email", "status", "submittedAt"]
+    }
+  },
+  "firestore": {
+    "/stores/{storeId}": {
+      "schema": "Store",
+      "description": "Leasable retail spaces registry."
+    },
+    "/settings/{settingId}": {
+      "schema": "LandingPageSettings",
+      "description": "Public brand and contact layouts."
+    },
+    "/chats/{chatId}": {
+      "schema": "Chat",
+      "description": "Live visitor chats and real-time support message registers."
+    },
+    "/emailRequests/{requestId}": {
+      "schema": "EmailRequest",
+      "description": "Security audit tracking for certificate and store detail lookups."
+    },
+    "/offers/{offerId}": {
+      "schema": "Offer",
+      "description": "Active negotiation and pricing offers on properties."
+    },
+    "/inquiries/{inquiryId}": {
+      "schema": "Inquiry",
+      "description": "General pre-sales and leasing informational inquiries per retail space."
+    },
+    "/malls/{mallId}": {
+      "schema": "Mall",
+      "description": "Commercial mall complex registers."
+    },
+    "/allocationRequests/{requestId}": {
+      "schema": "AllocationRequest",
+      "description": "Formal tenant allocation locks."
+    },
+    "/negotiationRequests/{requestId}": {
+      "schema": "NegotiationRequest",
+      "description": "Leasing pricing negotiations."
+    }
+  }
+}

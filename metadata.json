@@ -1,0 +1,6 @@
+{
+  "name": "Broward Mall",
+  "description": "Premium digital marketplace directory and store catalog system with map pins, leasing transaction reserves, and complete space tracking specs.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

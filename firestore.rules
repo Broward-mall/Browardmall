@@ -1,0 +1,130 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions for validation
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isAdmin() {
+      return request.auth != null && 
+             (request.auth.token.email == "williamfranklin4665@gmail.com" ||
+              request.auth.token.email == "admin@browardmall.com");
+    }
+
+    // Default catch-all deny rule to satisfy secure layout
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Rule block for STORES
+    match /stores/{storeId} {
+      allow read: if true; // Public directories access
+
+      // Creation restricted to authenticated administrators OR default seed stores
+      allow create: if (isAdmin() && isValidStore(incoming())) ||
+                     (incoming().isDemo == true && 
+                      incoming().trackingCode in ["LP-84592", "FB-22345", "EM-44589", "FC-90871"] &&
+                      isValidStore(incoming()));
+
+      // Deletion restricted to authenticated administrators ONLY
+      allow delete: if isAdmin();
+
+      // Update transitions
+      allow update: if (
+        // Admin overrides
+        (isAdmin() && isValidStore(incoming())) ||
+        
+        // Unauthenticated customer reservation transaction
+        (
+          existing().status == "Available" &&
+          incoming().status == "Reserved" &&
+          // Enforce exact change key restriction (only status and lease holder/previous tenant can change)
+          request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'previousTenant']) &&
+          // Preserve pricing, location, and sizing integrity
+          incoming().storeName == existing().storeName &&
+          incoming().sizeSqFt == existing().sizeSqFt &&
+          incoming().monthlyLease == existing().monthlyLease &&
+          incoming().trackingCode == existing().trackingCode
+        )
+      );
+    }
+
+    // Rule block for LANDING configurations
+    match /settings/{settingId} {
+      allow read: if true; // Public access to settings
+      allow write: if (isAdmin() && isValidSetting(incoming())) ||
+                   (request.method == "create" && incoming().heroTitle == "Broward Mall" && isValidSetting(incoming()));
+    }
+    
+    // Rule block for live chats
+    match /chats/{chatId} {
+      allow read, create, update: if true;
+      allow delete: if isAdmin();
+    }
+
+    // Rule block for email Requests
+    match /emailRequests/{requestId} {
+      allow read: if isAdmin();
+      allow create: if incoming().trackingCode is string && incoming().ownerEmail is string;
+      allow delete: if isAdmin();
+      allow update: if false;
+    }
+
+    // Rule block for allocationRequests
+    match /allocationRequests/{requestId} {
+      allow read, update, delete: if isAdmin();
+      allow create: if incoming().storeId is string && incoming().fullName is string && incoming().email is string;
+    }
+
+    // Rule block for negotiationRequests
+    match /negotiationRequests/{requestId} {
+      allow read, update, delete: if isAdmin();
+      allow create: if incoming().storeId is string && incoming().contactName is string && incoming().email is string && incoming().offerAmount is number;
+    }
+
+    // Rule block for offers (legacy/compatibility)
+    match /offers/{offerId} {
+      allow read: if isAdmin();
+      allow create: if incoming().storeId is string && incoming().contactName is string && incoming().offerAmount is number;
+      allow update, delete: if isAdmin();
+    }
+
+    // Rule block for malls
+    match /malls/{mallId} {
+      allow read: if true;
+      allow write, delete: if isAdmin();
+    }
+
+    // Rule block for inquiries
+    match /inquiries/{inquiryId} {
+      allow read: if isAdmin();
+      allow create: if incoming().storeId is string && incoming().visitorEmail is string && incoming().message is string;
+      allow update, delete: if isAdmin();
+    }
+
+    // Database entity validation schemas
+    function isValidStore(store) {
+      return store.storeName is string && store.storeName.size() <= 150 &&
+             store.trackingCode is string && store.trackingCode.size() <= 20 &&
+             store.sizeSqFt is number && store.sizeSqFt > 0 &&
+             store.monthlyLease is number && store.monthlyLease > 0 &&
+             store.lat is number && store.lng is number;
+    }
+
+    function isValidSetting(setting) {
+      return setting.heroTitle is string && setting.heroTitle.size() <= 150 &&
+             setting.heroSubtitle is string && setting.heroSubtitle.size() <= 500 &&
+             setting.contactPhone is string && setting.contactPhone.size() <= 30;
+    }
+  }
+}
