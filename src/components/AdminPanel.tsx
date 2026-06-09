@@ -345,6 +345,14 @@ export default function AdminPanel({
 
     try {
       await signInWithEmailAndPassword(auth, targetEmail, targetPassword);
+      
+      // Sync admin session cookie on the server
+      await fetch('/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: targetEmail, password: targetPassword }),
+      }).catch(() => {});
+
       onRefresh();
       onNavigate('admin');
     } catch (err: any) {
@@ -367,6 +375,7 @@ export default function AdminPanel({
   const handleLogout = async () => {
     try {
       await signOut(auth);
+      await fetch('/api/admin/logout', { method: 'POST' }).catch(() => {});
       onNavigate('');
       onRefresh();
     } catch (error) {
@@ -688,7 +697,7 @@ export default function AdminPanel({
     setFormStoreName(stItem.storeName);
     setFormLocation(stItem.location);
     setFormFloor(stItem.floor || 'Level 1');
-    setFormStatus(stItem.status || 'Available');
+    setFormStatus((stItem.status as any) || 'Available');
     setFormSize(stItem.sizeSqFt);
     setFormUtilities(stItem.utilities ?? true);
     setFormParking(stItem.parkingSpaces || 10);
