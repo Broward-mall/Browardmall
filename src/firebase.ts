@@ -3,28 +3,21 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { initializeApp, getApps, getApp } from 'firebase/app';
+import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { getFirestore, doc, getDocFromServer } from 'firebase/firestore';
 
-const getEnv = (key: string): string => {
-  if (typeof process !== 'undefined' && process.env) {
-    return process.env[key] || process.env[`NEXT_PUBLIC_${key}`] || '';
-  }
-  return '';
-};
-
-// Double resilience: load from env variables or fall back directly to the requested credentials
+// Double resilience: load from Vite env variables or fall back directly to the requested credentials
 const firebaseConfig = {
-  apiKey: getEnv('VITE_FIREBASE_API_KEY') || getEnv('FIREBASE_API_KEY') || "AIzaSyCtxNaHJCRQXNemlTXmNIJ3jG1GF7A7ha8",
-  authDomain: getEnv('VITE_FIREBASE_AUTH_DOMAIN') || getEnv('FIREBASE_AUTH_DOMAIN') || "broward-8e8f1.firebaseapp.com",
-  projectId: getEnv('VITE_FIREBASE_PROJECT_ID') || getEnv('FIREBASE_PROJECT_ID') || "broward-8e8f1",
-  storageBucket: getEnv('VITE_FIREBASE_STORAGE_BUCKET') || getEnv('FIREBASE_STORAGE_BUCKET') || "broward-8e8f1.firebasestorage.app",
-  messagingSenderId: getEnv('VITE_FIREBASE_MESSAGING_SENDER_ID') || getEnv('FIREBASE_MESSAGING_SENDER_ID') || "268184581960",
-  appId: getEnv('VITE_FIREBASE_APP_ID') || getEnv('FIREBASE_APP_ID') || "1:268184581960:web:200b2ab15f7207e916657d"
+  apiKey: (import.meta as any).env.VITE_FIREBASE_API_KEY || "AIzaSyCtxNaHJCRQXNemlTXmNIJ3jG1GF7A7ha8",
+  authDomain: (import.meta as any).env.VITE_FIREBASE_AUTH_DOMAIN || "broward-8e8f1.firebaseapp.com",
+  projectId: (import.meta as any).env.VITE_FIREBASE_PROJECT_ID || "broward-8e8f1",
+  storageBucket: (import.meta as any).env.VITE_FIREBASE_STORAGE_BUCKET || "broward-8e8f1.firebasestorage.app",
+  messagingSenderId: (import.meta as any).env.VITE_FIREBASE_MESSAGING_SENDER_ID || "268184581960",
+  appId: (import.meta as any).env.VITE_FIREBASE_APP_ID || "1:268184581960:web:200b2ab15f7207e916657d"
 };
 
-const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
+const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const auth = getAuth(app);
 
@@ -38,10 +31,7 @@ async function testConnection() {
     }
   }
 }
-
-if (typeof window !== 'undefined') {
-  testConnection();
-}
+testConnection();
 
 // Schema and Error Tracking Definitions
 export enum OperationType {

@@ -8,8 +8,7 @@ import { Search, Loader2, Tag, Maximize, CircleDollarSign, Star, ArrowRight, Cop
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db, handleFirestoreError, OperationType } from '../firebase';
 import { Store, LandingPageSettings, MockReview, Mall } from '../types';
-import dynamic from 'next/dynamic';
-const MapComponent = dynamic(() => import('./MapComponent'), { ssr: false });
+import MapComponent from './MapComponent';
 
 interface LandingPageProps {
   settings: LandingPageSettings;

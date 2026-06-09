@@ -12,8 +12,7 @@ import {
 import { doc, updateDoc, addDoc, collection } from 'firebase/firestore';
 import { db, handleFirestoreError, OperationType } from '../firebase';
 import { Store } from '../types';
-import dynamic from 'next/dynamic';
-const MapComponent = dynamic(() => import('./MapComponent'), { ssr: false });
+import MapComponent from './MapComponent';
 
 interface StoreDetailProps {
   store: Store;
