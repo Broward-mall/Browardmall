@@ -59,24 +59,24 @@ export default function StoreDetail({ store, onNavigate, onRefresh }: StoreDetai
   const getStatusBadgeClassAndLabel = (status: string) => {
     const s = (status || '').toUpperCase();
     if (s === 'AVAILABLE') {
-      return { class: 'bg-[#d4af37] text-black border border-[#d4af37]', label: 'AVAILABLE' };
+      return { class: 'bg-emerald-100 text-emerald-800 border border-emerald-200', label: 'AVAILABLE' };
     }
     if (s === 'SOLD') {
-      return { class: 'bg-neutral-800 border border-neutral-700 text-neutral-400', label: 'SOLD' };
+      return { class: 'bg-rose-100 text-rose-800 border border-rose-200', label: 'SOLD' };
     }
     if (s === 'LEASED') {
-      return { class: 'bg-blue-600 border border-blue-500 text-white', label: 'LEASED' };
+      return { class: 'bg-blue-100 text-blue-800 border border-blue-200', label: 'LEASED' };
     }
     if (s === 'RESERVED') {
-      return { class: 'bg-amber-600 border border-amber-500 text-white', label: 'RESERVED' };
+      return { class: 'bg-amber-100 text-amber-800 border border-amber-200', label: 'RESERVED' };
     }
     if (s === 'UNDER NEGOTIATION' || s === 'UNDER_NEGOTIATION') {
-      return { class: 'bg-purple-600 border border-purple-500 text-white', label: 'UNDER NEGOTIATION' };
+      return { class: 'bg-orange-100 text-orange-800 border border-orange-200', label: 'UNDER NEGOTIATION' };
     }
     if (s === 'COMING SOON' || s === 'COMING_SOON') {
-      return { class: 'bg-sky-500 border border-sky-400 text-white', label: 'COMING SOON' };
+      return { class: 'bg-gray-100 text-gray-800 border border-gray-200', label: 'COMING SOON' };
     }
-    return { class: 'bg-neutral-700 text-white border border-neutral-600', label: status.toUpperCase() };
+    return { class: 'bg-gray-100 text-gray-800 border border-gray-200', label: status.toUpperCase() };
   };
 
   const badgeInfo = getStatusBadgeClassAndLabel(store.status);
@@ -339,10 +339,15 @@ Message: ${inquiryMessage}`,
   };
 
   return (
-    <div className="relative bg-[#0a0a0c] text-neutral-100 min-h-screen py-10 font-sans">
+    <div className="relative bg-[#F8FAFC] text-[#0F172A] min-h-screen py-10 font-sans">
       
-      {/* Decorative background element */}
-      <div className="absolute top-0 left-0 right-0 h-[400px] bg-gradient-to-b from-[#121216] via-[#0a0a0c] to-transparent pointer-events-none border-b border-neutral-900"></div>
+      {/* Decorative subtle light blue gradient background */}
+      <div 
+        className="absolute top-0 left-0 right-0 h-[400px] pointer-events-none border-b border-[#E2E8F0]"
+        style={{
+          background: "linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%)"
+        }}
+      ></div>
  
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         
@@ -350,63 +355,63 @@ Message: ${inquiryMessage}`,
         <button
           type="button"
           onClick={() => onNavigate('')}
-          className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-neutral-300 hover:text-[#d4af37] bg-[#121216] border border-neutral-800 hover:border-[#d4af37] py-2 px-4 rounded-xl shadow-lg transition-all cursor-pointer mb-8"
+          className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-[#475569] hover:text-[#2563EB] bg-white border border-[#E2E8F0] hover:border-[#2563EB] py-2 px-4 rounded-xl shadow-sm transition-all cursor-pointer mb-8"
         >
-          <ArrowLeft className="h-4 w-4 text-[#d4af37]" />
+          <ArrowLeft className="h-4 w-4 text-[#2563EB]" />
           Back to Directory Map
         </button>
  
         {/* Store Title Board Header Section */}
-        <div className="bg-[#121216] border border-neutral-800 rounded-3xl p-6 sm:p-8 mb-8 shadow-[0_4px_30px_rgba(0,0,0,0.4)] flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="bg-white border border-[#E2E8F0] rounded-3xl p-6 sm:p-8 mb-8 shadow-[0_4px_20px_rgba(15,23,42,0.06)] flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex flex-col sm:flex-row items-center gap-5 text-center sm:text-left">
             {store.logo ? (
               <img
                 src={store.logo}
                 alt=""
-                className="w-16 h-16 rounded-2xl object-cover border border-neutral-850 shadow-lg"
+                className="w-16 h-16 rounded-2xl object-cover border border-[#E2E8F0] shadow-sm"
                 id="store-logo-detail"
                 referrerPolicy="no-referrer"
               />
             ) : (
-              <div className="w-16 h-16 bg-black border border-neutral-800 text-[#d4af37] rounded-2xl text-2xl font-bold flex items-center justify-center font-display shadow-inner">S</div>
+              <div className="w-16 h-16 bg-[#F8FAFC] border border-[#E2E8F0] text-[#2563EB] rounded-2xl text-2xl font-bold flex items-center justify-center font-display shadow-inner">S</div>
             )}
             <div>
-              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mb-2">
-                <span className="text-[10px] font-mono tracking-wider uppercase bg-neutral-950 text-neutral-300 border border-neutral-800 px-2.5 py-0.5 rounded-lg font-bold">
+              <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 mb-1.5 font-sans">
+                <span className="text-[10px] font-mono tracking-wider uppercase bg-[#F8FAFC] text-[#475569] border border-[#E2E8F0] px-2.5 py-0.5 rounded-lg font-bold">
                   Code: {store.trackingCode}
                 </span>
                 <span className={`text-[10px] uppercase tracking-wider font-bold font-mono px-2.5 py-0.5 rounded-lg shadow-sm ${badgeInfo.class}`}>
                   {badgeInfo.label}
                 </span>
               </div>
-              <h1 className="text-2xl sm:text-3xl font-display font-extrabold text-white tracking-tight">
+              <h1 className="text-2xl sm:text-3xl font-display font-extrabold text-[#0F172A] tracking-tight">
                 {store.storeName}
               </h1>
-              <p className="text-xs text-neutral-400 flex items-center justify-center sm:justify-start gap-1 mt-1 font-medium">
-                <MapPin className="h-3.5 w-3.5 text-[#d4af37]" />
+              <p className="text-xs text-[#475569] flex items-center justify-center sm:justify-start gap-1 mt-1 font-medium">
+                <MapPin className="h-3.5 w-3.5 text-[#2563EB]" />
                 {store.location}, inside {store.mallName || "Broward Mall Complex"} {store.unitNumber ? `(Suite ${store.unitNumber})` : ''}
               </p>
             </div>
           </div>
  
           <div className="w-full md:w-auto flex flex-col gap-3.5 sm:flex-row md:flex-col lg:flex-row shrink-0 font-display">
-            <div className="text-center sm:text-left bg-neutral-950 border border-neutral-850 rounded-2xl px-5 py-3 min-w-[160px]">
-              <span className="text-[9px] text-[#d4af37] uppercase tracking-wider font-mono block font-bold">Monthly Lease Rate</span>
-              <span className="text-xl font-extrabold text-white block">${store.monthlyLease.toLocaleString()} <span className="text-xs font-normal text-neutral-500">/mo</span></span>
+            <div className="text-center sm:text-left bg-[#F8FAFC] border border-[#E2E8F0] rounded-2xl px-5 py-3 min-w-[160px]">
+              <span className="text-[9px] text-[#2563EB] uppercase tracking-wider font-mono block font-bold">Monthly Lease Rate</span>
+              <span className="text-xl font-extrabold text-[#0F172A] block">${store.monthlyLease.toLocaleString()} <span className="text-xs font-normal text-[#475569]">/mo</span></span>
             </div>
             {store.status === 'Available' ? (
               <button
                 type="button"
                 id="btn-initiate-leasing"
                 onClick={() => setModalOpen(true)}
-                className="bg-[#d4af37] hover:bg-[#c49e27] text-black font-extrabold text-xs py-3.5 px-6 rounded-2xl uppercase tracking-wider transition-all duration-300 shadow-md flex items-center justify-center gap-2 cursor-pointer"
+                className="bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-extrabold text-xs py-3.5 px-6 rounded-2xl uppercase tracking-wider transition-all duration-300 shadow-[0_4px_12px_rgba(37,99,235,0.2)] hover:shadow-[0_4px_20px_rgba(37,99,235,0.3)] flex items-center justify-center gap-2 cursor-pointer"
               >
-                <Sparkles className="h-4 w-4 text-black" />
+                <Sparkles className="h-4 w-4 text-white" />
                 Initiate Acquirement
               </button>
             ) : (
-              <div className="bg-[#18181e] border border-neutral-850 px-6 py-4 rounded-2xl flex items-center gap-2 text-xs font-medium text-neutral-400 justify-center shadow-inner">
-                <ShieldAlert className="h-4.5 w-4.5 text-[#d4af37]" />
+              <div className="bg-[#F8FAFC] border border-[#E2E8F0] px-6 py-4 rounded-2xl flex items-center gap-2 text-xs font-medium text-[#475569] justify-center shadow-inner">
+                <ShieldAlert className="h-4.5 w-4.5 text-[#2563EB]" />
                 Lease locked or allocated manually.
               </div>
             )}
@@ -418,83 +423,83 @@ Message: ${inquiryMessage}`,
           
           {/* Specifications Dashboard Panel */}
           <div className="lg:col-span-4 space-y-6">
-            <div className="bg-[#121216] border border-neutral-800 rounded-3xl p-6 shadow-[0_4px_25px_rgba(0,0,0,0.3)]">
-              <h3 className="text-xs font-bold font-display uppercase tracking-wider text-white border-b border-neutral-900 pb-3.5 mb-4">
+            <div className="bg-white border border-[#E2E8F0] rounded-3xl p-6 shadow-[0_4px_20px_rgba(15,23,42,0.04)]">
+              <h3 className="text-xs font-bold font-display uppercase tracking-wider text-[#0F172A] border-b border-[#E2E8F0] pb-3.5 mb-4 font-sans">
                 Store Specifications
               </h3>
               
               <div className="space-y-4 text-xs font-mono">
-                <div className="flex justify-between items-center py-2.5 border-b border-neutral-900">
-                  <span className="text-neutral-400">Tracking Code:</span>
-                  <span className="text-[#d4af37] font-bold bg-neutral-950 px-2 py-0.5 rounded border border-neutral-800">{store.trackingCode}</span>
+                <div className="flex justify-between items-center py-2.5 border-b border-[#E2E8F0]">
+                  <span className="text-[#475569]">Tracking Code:</span>
+                  <span className="text-[#2563EB] font-bold bg-[#F8FAFC] px-2 py-0.5 rounded border border-[#E2E8F0]">{store.trackingCode}</span>
                 </div>
-                <div className="flex justify-between items-center py-2.5 border-b border-neutral-900">
-                  <span className="text-neutral-400">Floor Level:</span>
-                  <span className="text-white font-semibold">{store.floor}</span>
+                <div className="flex justify-between items-center py-2.5 border-b border-[#E2E8F0]">
+                  <span className="text-[#475569]">Floor Level:</span>
+                  <span className="text-[#0F172A] font-semibold">{store.floor}</span>
                 </div>
-                <div className="flex justify-between items-center py-2.5 border-b border-neutral-900">
-                  <span className="text-neutral-400">Store Capacity:</span>
-                  <span className="text-white font-bold">{store.sizeSqFt.toLocaleString()} Sq Ft</span>
+                <div className="flex justify-between items-center py-2.5 border-b border-[#E2E8F0]">
+                  <span className="text-[#475569]">Store Capacity:</span>
+                  <span className="text-[#0F172A] font-bold">{store.sizeSqFt.toLocaleString()} Sq Ft</span>
                 </div>
-                <div className="flex justify-between items-center py-2.5 border-b border-neutral-900">
-                  <span className="text-neutral-400">Lease Setup:</span>
-                  <span className="text-neutral-200 font-medium">{store.leaseType}</span>
+                <div className="flex justify-between items-center py-2.5 border-b border-[#E2E8F0]">
+                  <span className="text-[#475569]">Lease Setup:</span>
+                  <span className="text-[#0F172A] font-medium">{store.leaseType}</span>
                 </div>
-                <div className="flex justify-between items-center py-2.5 border-b border-neutral-900">
-                  <span className="text-neutral-400">Utilities Fitout:</span>
-                  <span className="flex items-center gap-1 text-white font-semibold">
-                    <Droplet className="h-3.5 w-3.5 text-blue-400" />
+                <div className="flex justify-between items-center py-2.5 border-b border-[#E2E8F0]">
+                  <span className="text-[#475569]">Utilities Fitout:</span>
+                  <span className="flex items-center gap-1 text-[#0F172A] font-semibold">
+                    <Droplet className="h-3.5 w-3.5 text-[#2563EB]" />
                     {store.utilities ? "Fully Fitted" : "Custom Hookups Requested"}
                   </span>
                 </div>
-                <div className="flex justify-between items-center py-2.5 border-b border-neutral-900">
-                  <span className="text-neutral-400">Parking Shares:</span>
-                  <span className="flex items-center gap-1 text-white">
-                    <Car className="h-3.5 w-3.5 text-[#d4af37]" />
+                <div className="flex justify-between items-center py-2.5 border-b border-[#E2E8F0]">
+                  <span className="text-[#475569]">Parking Shares:</span>
+                  <span className="flex items-center gap-1 text-[#0F172A]">
+                    <Car className="h-3.5 w-3.5 text-[#2563EB]" />
                     {store.parkingSpaces} Allotted
                   </span>
                 </div>
-                <div className="flex justify-between items-center py-2.5 border-b border-neutral-900">
-                  <span className="text-neutral-400">Height Parameter:</span>
-                  <span className="text-neutral-200 font-medium">{store.ceilingHeight}</span>
+                <div className="flex justify-between items-center py-2.5 border-b border-[#E2E8F0]">
+                  <span className="text-[#475569]">Height Parameter:</span>
+                  <span className="text-[#0F172A] font-medium">{store.ceilingHeight}</span>
                 </div>
-                <div className="flex justify-between items-center py-2.5 border-b border-neutral-900">
-                  <span className="text-neutral-400">Loading Back Bays:</span>
-                  <span className="text-neutral-200">{store.loadingBays} DockDoors</span>
+                <div className="flex justify-between items-center py-2.5 border-b border-[#E2E8F0]">
+                  <span className="text-[#475569]">Loading Back Bays:</span>
+                  <span className="text-[#0F172A]">{store.loadingBays} DockDoors</span>
                 </div>
                 <div className="flex justify-between items-center py-1 flex-wrap gap-2">
-                  <span className="text-neutral-400">Previous Occupant:</span>
-                  <span className="text-[#d4af37] italic font-semibold">{store.previousTenant || "None Logged"}</span>
+                  <span className="text-[#475569]">Previous Occupant:</span>
+                  <span className="text-[#2563EB] italic font-semibold">{store.previousTenant || "None Logged"}</span>
                 </div>
               </div>
             </div>
  
             {/* Premium Yearly Payment Tier Card */}
-            <div className="bg-gradient-to-br from-[#121216] to-[#010103] border border-neutral-800 text-white rounded-3xl p-6 shadow-xl relative overflow-hidden">
-              <div className="absolute right-0 top-0 -mt-4 -mr-4 w-20 h-20 bg-[#d4af37]/5 rounded-full blur-xl animate-pulse"></div>
+            <div className="bg-gradient-to-br from-white to-[#F8FAFC] border border-[#E2E8F0] text-[#0F172A] rounded-3xl p-6 shadow-[0_4px_20px_rgba(15,23,42,0.04)] relative overflow-hidden">
+              <div className="absolute right-0 top-0 -mt-4 -mr-4 w-20 h-20 bg-[#2563EB]/5 rounded-full blur-xl animate-pulse"></div>
               
-              <div className="flex items-center gap-2 text-[#d4af37] mb-4">
+              <div className="flex items-center gap-2 text-[#2563EB] mb-4 font-bold">
                 <Receipt className="h-4.5 w-4.5" />
-                <span className="text-[10px] font-mono tracking-widest uppercase font-bold">Leasing Capital discount</span>
+                <span className="text-[10px] font-mono tracking-widest uppercase">Leasing Capital discount</span>
               </div>
               
-              <h4 className="text-sm font-bold font-display uppercase tracking-wider mb-2.5 text-white">Discounted Yearly option</h4>
-              <p className="text-[11px] text-neutral-300 mb-5 leading-relaxed font-sans font-normal">
+              <h4 className="text-sm font-bold font-display uppercase tracking-wider mb-2.5 text-[#0F172A]">Discounted Yearly option</h4>
+              <p className="text-[11px] text-[#475569] mb-5 leading-relaxed font-sans font-normal">
                 By opting for the lump-sum annual program instead of standard monthly checks, you receive a full 15% discount on leasing overhead.
               </p>
  
-              <div className="bg-neutral-950/60 border border-neutral-850 rounded-2xl p-4 space-y-2 text-xs font-mono">
+              <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-2xl p-4 space-y-2 text-xs font-mono">
                 <div className="flex justify-between">
-                  <span className="text-neutral-400">Annual Payment:</span>
-                  <span className="text-[#d4af37] font-extrabold">${simulatedYearlyDiscountAmount.toLocaleString()}/yr</span>
+                  <span className="text-[#475569]">Annual Payment:</span>
+                  <span className="text-[#2563EB] font-extrabold">${simulatedYearlyDiscountAmount.toLocaleString()}/yr</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-neutral-400">Effective rate:</span>
-                  <span className="text-emerald-400 underline font-extrabold">${(simulatedYearlyDiscountAmount / 12).toLocaleString([], { maximumFractionDigits: 0 })}/mo</span>
+                  <span className="text-[#475569]">Effective rate:</span>
+                  <span className="text-[#16A34A] underline font-extrabold">${(simulatedYearlyDiscountAmount / 12).toLocaleString([], { maximumFractionDigits: 0 })}/mo</span>
                 </div>
-                <div className="flex justify-between pt-1 border-t border-neutral-900">
-                  <span className="text-neutral-400">Expiation program:</span>
-                  <span className="text-white font-medium text-[10px] truncate">{formattedExpiration}</span>
+                <div className="flex justify-between pt-1 border-t border-[#E2E8F0]">
+                  <span className="text-[#475569]">Expiration program:</span>
+                  <span className="text-[#0F172A] font-medium text-[10px] truncate">{formattedExpiration}</span>
                 </div>
               </div>
  
@@ -505,142 +510,142 @@ Message: ${inquiryMessage}`,
                     setCategory('Discounted Yearly Payment Options');
                     setModalOpen(true);
                   }}
-                  className="w-full mt-4 bg-white hover:bg-[#d4af37] text-black py-2.5 rounded-xl text-[10px] font-display font-extrabold uppercase tracking-wide cursor-pointer transition-all"
+                  className="w-full mt-4 bg-[#2563EB] hover:bg-[#1D4ED8] text-white py-2.5 rounded-xl text-[10px] font-display font-extrabold uppercase tracking-wide cursor-pointer transition-all shadow-md shadow-blue-500/10"
                 >
                   Select Annual Contract
                 </button>
               )}
             </div>
-
+ 
             {/* Suite Ownership Details Card & Owner Verification Form */}
             <div className="space-y-6">
               {store.ownerName ? (
-                <div className="bg-[#121216]/90 border border-neutral-800 rounded-3xl p-6 shadow-md space-y-3.5">
-                  <div className="flex items-center gap-2 text-[#d4af37]">
+                <div className="bg-white border border-[#E2E8F0] rounded-3xl p-6 shadow-[0_4px_20px_rgba(15,23,42,0.04)] space-y-3.5">
+                  <div className="flex items-center gap-2 text-[#2563EB]">
                     <Landmark className="h-4.5 w-4.5" />
-                    <span className="text-[10px] font-mono tracking-widest uppercase font-bold text-amber-500">Suite Ownership Registry</span>
+                    <span className="text-[10px] font-mono tracking-widest uppercase font-bold text-[#2563EB]">Suite Ownership Registry</span>
                   </div>
                   
-                  <h4 className="text-sm font-bold font-display uppercase tracking-wider text-white">Owner Information</h4>
+                  <h4 className="text-sm font-bold font-display uppercase tracking-wider text-[#0F172A]">Owner Information</h4>
                   
                   <div className="space-y-2 text-xs font-mono">
-                    <div className="flex justify-between py-1 border-b border-neutral-900">
-                      <span className="text-neutral-400">Owner Name:</span>
-                      <span className="text-white font-bold">{store.ownerName}</span>
+                    <div className="flex justify-between py-1 border-b border-[#E2E8F0]">
+                      <span className="text-[#475569]">Owner Name:</span>
+                      <span className="text-[#0F172A] font-bold">{store.ownerName}</span>
                     </div>
                     {store.ownerEmail && (
-                      <div className="flex justify-between py-1 border-b border-neutral-900">
-                        <span className="text-neutral-400">Email:</span>
-                        <a href={`mailto:${store.ownerEmail}`} className="text-[#d4af37] hover:underline truncate max-w-[140px]">{store.ownerEmail}</a>
+                      <div className="flex justify-between py-1 border-b border-[#E2E8F0]">
+                        <span className="text-[#475569]">Email:</span>
+                        <a href={`mailto:${store.ownerEmail}`} className="text-[#2563EB] hover:underline truncate max-w-[140px] font-semibold">{store.ownerEmail}</a>
                       </div>
                     )}
                     {store.ownerPhone && (
-                      <div className="flex justify-between py-1 border-b border-neutral-900">
-                        <span className="text-neutral-400">Phone:</span>
-                        <a href={`tel:${store.ownerPhone}`} className="text-[#d4af37] hover:underline">{store.ownerPhone}</a>
+                      <div className="flex justify-between py-1 border-b border-[#E2E8F0]">
+                        <span className="text-[#475569]">Phone:</span>
+                        <a href={`tel:${store.ownerPhone}`} className="text-[#2563EB] hover:underline font-semibold">{store.ownerPhone}</a>
                       </div>
                     )}
                     {store.ownershipType && (
-                      <div className="flex justify-between py-1 border-b border-neutral-900">
-                        <span className="text-neutral-400">Ownership Type:</span>
-                        <span className="text-white font-semibold">{store.ownershipType}</span>
+                      <div className="flex justify-between py-1 border-b border-[#E2E8F0]">
+                        <span className="text-[#475569]">Ownership Type:</span>
+                        <span className="text-[#0F172A] font-semibold">{store.ownershipType}</span>
                       </div>
                     )}
                     {store.purchaseDate && (
-                      <div className="flex justify-between py-1 border-b border-neutral-900">
-                        <span className="text-neutral-400">Acquired Date:</span>
-                        <span className="text-white">{new Date(store.purchaseDate).toLocaleDateString([], { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                      <div className="flex justify-between py-1 border-b border-[#E2E8F0]">
+                        <span className="text-[#475569]">Acquired Date:</span>
+                        <span className="text-[#0F172A]">{new Date(store.purchaseDate).toLocaleDateString([], { year: 'numeric', month: 'long', day: 'numeric' })}</span>
                       </div>
                     )}
                     {store.expiryDate && (
                       <div className="flex justify-between py-1">
-                        <span className="text-neutral-400">Lease Expiry:</span>
-                        <span className="text-rose-400 font-semibold">{new Date(store.expiryDate).toLocaleDateString([], { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                        <span className="text-[#475569]">Lease Expiry:</span>
+                        <span className="text-[#DC2626] font-semibold">{new Date(store.expiryDate).toLocaleDateString([], { year: 'numeric', month: 'long', day: 'numeric' })}</span>
                       </div>
                     )}
                   </div>
                 </div>
               ) : (
-                <div className="bg-[#121216]/60 border border-neutral-850 rounded-3xl p-6 shadow-md space-y-2.5">
-                  <div className="flex items-center gap-2 text-neutral-400">
+                <div className="bg-white border border-[#E2E8F0] rounded-3xl p-6 shadow-[0_4px_20px_rgba(15,23,42,0.04)] space-y-2.5">
+                  <div className="flex items-center gap-2 text-[#475569]">
                     <ShieldAlert className="h-4.5 w-4.5" />
-                    <span className="text-[10px] font-mono tracking-widest uppercase font-bold">Unregistered Space</span>
+                    <span className="text-[10px] font-mono tracking-widest uppercase font-bold font-sans">Unregistered Space</span>
                   </div>
-                  <h4 className="text-xs font-semibold uppercase text-neutral-300">Public Corporate Space</h4>
-                  <p className="text-[11px] leading-relaxed text-neutral-400 font-sans">
+                  <h4 className="text-xs font-semibold uppercase text-[#0F172A]">Public Corporate Space</h4>
+                  <p className="text-[11px] leading-relaxed text-[#475569] font-sans">
                     This retail allocation is currently unassigned. Complete a pricing offer subscription or lease registration to generate cryptographically signed ownership credentials.
                   </p>
                 </div>
               )}
-
+ 
               {/* Secure Store Owner Verification Panel */}
               {store.ownerEmail && (
-                <div className="bg-[#121216] border border-[#d4af37]/30 rounded-3xl p-6 shadow-lg space-y-4 relative overflow-hidden">
-                  <div className="absolute top-0 right-0 w-24 h-24 bg-[#d4af37]/5 rounded-bl-full pointer-events-none" />
+                <div className="bg-white border border-[#2563EB]/25 rounded-3xl p-6 shadow-[0_4px_20px_rgba(15,23,42,0.06)] space-y-4 relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-[#2563EB]/5 rounded-bl-full pointer-events-none" />
                   
-                  <div className="flex items-center gap-2 text-[#d4af37]">
-                    <Mail className="h-4.5 w-4.5 text-amber-500" />
-                    <span className="text-[10px] font-mono tracking-widest uppercase font-bold text-amber-500">Secure Audit Verification</span>
+                  <div className="flex items-center gap-2 text-[#2563EB] font-sans font-bold">
+                    <Mail className="h-4.5 w-4.5 text-[#2563EB]" />
+                    <span className="text-[10px] font-mono tracking-widest uppercase">Secure Audit Verification</span>
                   </div>
-
+ 
                   <div>
-                    <h4 className="text-xs font-bold font-display uppercase tracking-wider text-white">Email Store Details</h4>
-                    <p className="text-[10px] text-neutral-400 mt-1">Receive secure reports & credentials on registered emails.</p>
+                    <h4 className="text-xs font-bold font-display uppercase tracking-wider text-[#0F172A]">Email Store Details</h4>
+                    <p className="text-[10px] text-[#475569] mt-1">Receive secure reports & credentials on registered emails.</p>
                   </div>
-
+ 
                   <form className="space-y-3" onSubmit={(e) => e.preventDefault()}>
                     <div className="space-y-1.5">
-                      <label className="block text-[10px] font-mono uppercase text-neutral-400 font-bold">Owner Email Address</label>
+                      <label className="block text-[10px] font-mono uppercase text-[#475569] font-bold font-sans">Owner Email Address</label>
                       <input
                         type="email"
                         required
                         value={verifyEmail}
                         onChange={(e) => setVerifyEmail(e.target.value)}
                         placeholder="owner@example.com"
-                        className="w-full bg-neutral-950 border border-neutral-800 focus:border-[#d4af37] rounded-xl px-3.5 py-2 text-xs text-white outline-none font-medium placeholder-neutral-600 transition-colors"
+                        className="w-full bg-[#F8FAFC] border border-[#E2E8F0] focus:border-[#2563EB] rounded-xl px-3.5 py-2 text-xs text-[#0F172A] outline-none font-medium placeholder-[#94A3B8] transition-colors"
                       />
                     </div>
-
+ 
                     <div className="space-y-1.5">
-                      <label className="block text-[10px] font-mono uppercase text-neutral-400 font-bold">Registry Tracking Code</label>
+                      <label className="block text-[10px] font-mono uppercase text-[#475569] font-bold font-sans">Registry Tracking Code</label>
                       <input
                         type="text"
                         required
                         value={verifyTrackingCode}
                         onChange={(e) => setVerifyTrackingCode(e.target.value)}
                         placeholder="e.g. BM-12345"
-                        className="w-full bg-neutral-950 border border-neutral-800 focus:border-[#d4af37] rounded-xl px-3.5 py-2 text-xs text-white outline-none font-mono placeholder-neutral-600 transition-colors"
+                        className="w-full bg-[#F8FAFC] border border-[#E2E8F0] focus:border-[#2563EB] rounded-xl px-3.5 py-2 text-xs text-[#0F172A] outline-none font-mono placeholder-[#94A3B8] transition-colors"
                       />
                     </div>
-
+ 
                     {verifyError && (
-                      <div className="p-3 bg-rose-950/20 border border-rose-800/40 rounded-xl text-rose-400 text-[10px] sm:text-xs leading-relaxed font-semibold">
+                      <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-red-600 text-[10px] sm:text-xs leading-relaxed font-semibold">
                         {verifyError}
                       </div>
                     )}
-
+ 
                     {verifySuccess && (
-                      <div className="p-3 bg-emerald-950/20 border border-emerald-800/40 rounded-xl text-emerald-400 text-[10px] sm:text-xs leading-relaxed font-semibold">
+                      <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-[#16A34A] text-[10px] sm:text-xs leading-relaxed font-semibold">
                         {verifySuccess}
                       </div>
                     )}
-
+ 
                     <div className="grid grid-cols-2 gap-2.5 pt-1.5">
                       <button
                         type="button"
                         disabled={verifyLoading || !verifyEmail || !verifyTrackingCode}
                         onClick={handleSendDetails}
-                        className="flex items-center justify-center gap-1.5 bg-neutral-900 border border-neutral-800 hover:border-[#d4af37] text-white disabled:opacity-40 py-2.5 rounded-xl text-[10px] font-bold uppercase transition-all"
+                        className="flex items-center justify-center gap-1.5 bg-[#F8FAFC] border border-[#E2E8F0] hover:border-[#2563EB] text-[#475569] hover:text-[#0F172A] disabled:opacity-40 py-2.5 rounded-xl text-[10px] font-bold uppercase transition-all cursor-pointer"
                       >
-                        {verifyLoading ? <Loader2 className="h-3 w-3 animate-spin" /> : <Send className="h-3.5 w-3.5 text-[#d4af37]" />}
+                        {verifyLoading ? <Loader2 className="h-3 w-3 animate-spin" /> : <Send className="h-3.5 w-3.5 text-[#2563EB]" />}
                         Send Details
                       </button>
-
+ 
                       <button
                         type="button"
                         disabled={verifyLoading || !verifyEmail || !verifyTrackingCode}
                         onClick={handleDownloadDoc}
-                        className="flex items-center justify-center gap-1.5 bg-[#d4af37] text-black font-extrabold hover:opacity-90 disabled:opacity-40 py-2.5 rounded-xl text-[10px] font-display uppercase transition-all"
+                        className="flex items-center justify-center gap-1.5 bg-[#16A34A] hover:bg-[#15803D] text-white font-extrabold hover:opacity-90 disabled:opacity-40 py-2.5 rounded-xl text-[10px] font-display uppercase transition-all cursor-pointer shadow-md shadow-emerald-500/10"
                       >
                         {verifyLoading ? <Loader2 className="h-3 w-3 animate-spin" /> : <Download className="h-3.5 w-3.5" />}
                         Certificate
@@ -650,30 +655,30 @@ Message: ${inquiryMessage}`,
                 </div>
               )}
             </div>
-
+ 
             {/* Photo Showcase Gallery */}
-            <div className="bg-[#121216] border border-neutral-800 rounded-3xl p-5 shadow-sm space-y-4">
-              <div className="flex items-center justify-between border-b border-neutral-900 pb-2.5">
-                <h3 className="text-xs font-bold font-display uppercase tracking-wider text-white">
+            <div className="bg-white border border-[#E2E8F0] rounded-3xl p-5 shadow-[0_4px_20px_rgba(15,23,42,0.04)] space-y-4">
+              <div className="flex items-center justify-between border-b border-[#E2E8F0] pb-2.5">
+                <h3 className="text-xs font-bold font-display uppercase tracking-wider text-[#0F172A]">
                   Media Showcase
                 </h3>
               </div>
-
+ 
               <div className="grid grid-cols-2 gap-2.5">
                 {store.images && store.images.length > 0 ? (
                   store.images.map((img, i) => (
-                    <div key={i} className="group relative h-20 overflow-hidden rounded-xl bg-neutral-950 border border-neutral-850">
+                    <div key={i} className="group relative h-20 overflow-hidden rounded-xl bg-[#F8FAFC] border border-[#E2E8F0]">
                       <img
                         src={img}
                         alt=""
-                        className="w-full h-full object-cover group-hover:scale-105 transition-all duration-300"
+                        className="w-full h-full object-cover group-hover:scale-102 transition-all duration-300"
                         id={`visual-gallery-${i}`}
                         referrerPolicy="no-referrer"
                       />
                     </div>
                   ))
                 ) : (
-                  <div className="col-span-2 h-28 bg-neutral-950 border border-dotted border-neutral-800 rounded-xl flex items-center justify-center text-neutral-500 font-mono text-[10px]">
+                  <div className="col-span-2 h-28 bg-[#F8FAFC] border border-dotted border-[#E2E8F0] rounded-xl flex items-center justify-center text-[#94A3B8] font-mono text-[10px]">
                     No images compiled.
                   </div>
                 )}
@@ -685,62 +690,60 @@ Message: ${inquiryMessage}`,
           <div className="lg:col-span-8 space-y-6">
             
             {/* Map Frame */}
-            <div className="bg-[#121216] border border-neutral-800 rounded-3xl p-3 shadow-[0_4px_25px_rgba(0,0,0,0.3)] flex flex-col gap-3">
+            <div className="bg-white border border-[#E2E8F0] rounded-3xl p-3 shadow-[0_4px_20px_rgba(15,23,42,0.06)] flex flex-col gap-3">
               <div className="flex items-center justify-between px-3 pt-2">
-                <span className="text-xs font-mono uppercase text-white font-bold flex items-center gap-1.5">
-                  <Milestone className="h-4.5 w-4.5 text-[#d4af37]" /> Active Mall Location Track
+                <span className="text-xs font-mono uppercase text-[#0F172A] font-bold flex items-center gap-1.5">
+                  <Milestone className="h-4.5 w-4.5 text-[#2563EB]" /> Active Mall Location Track
                 </span>
-                <span className="text-[10px] text-neutral-500 font-mono">OpenStreetMap GIS Platform only</span>
+                <span className="text-[10px] text-[#94A3B8] font-mono">OpenStreetMap GIS Platform only</span>
               </div>
-              <div className="border border-neutral-900 rounded-2xl overflow-hidden p-1 bg-neutral-950">
+              <div className="border border-[#E2E8F0] rounded-2xl overflow-hidden p-1 bg-[#F8FAFC]">
                 <MapComponent stores={[store]} selectedStore={store} heightClass="h-[380px]" />
               </div>
-            </div>
- 
-            {/* Interior Descriptions Section */}
-            <div className="bg-[#121216] border border-neutral-800 rounded-3xl p-6 sm:p-8 shadow-[0_4px_25px_rgba(0,0,0,0.3)]">
-              <h3 className="text-xs font-bold font-display uppercase tracking-wider text-white border-b border-neutral-900 pb-3.5 mb-6 flex items-center gap-2">
-                <Layers className="h-4.5 w-4.5 text-[#d4af37]" /> Structural Features Layout
+            </div>            {/* Interior Descriptions Section */}
+            <div className="bg-white border border-[#E2E8F0] rounded-3xl p-6 sm:p-8 shadow-[0_4px_20px_rgba(15,23,42,0.04)]">
+              <h3 className="text-xs font-bold font-display uppercase tracking-wider text-[#0F172A] border-b border-[#E2E8F0] pb-3.5 mb-6 flex items-center gap-2 font-sans">
+                <Layers className="h-4.5 w-4.5 text-[#2563EB]" /> Structural Features Layout
               </h3>
- 
+  
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {store.description?.features?.map((feat, idx) => (
                   <div
                     key={idx}
-                    className="flex gap-3 items-start bg-[#18181e] border border-neutral-850 p-4 rounded-2xl"
+                    className="flex gap-3 items-start bg-[#F8FAFC] border border-[#E2E8F0] p-4 rounded-2xl"
                   >
-                    <div className="w-5 h-5 rounded-lg bg-[#d4af37] text-black flex items-center justify-center shrink-0 mt-0.5 shadow-md">
+                    <div className="w-5 h-5 rounded-lg bg-[#2563EB] text-white flex items-center justify-center shrink-0 mt-0.5 shadow-sm">
                       <Check className="h-3.5 w-3.5 font-bold" />
                     </div>
-                    <span className="text-xs text-neutral-200 leading-relaxed font-sans font-semibold">{feat}</span>
+                    <span className="text-xs text-[#0F172A] leading-relaxed font-sans font-semibold">{feat}</span>
                   </div>
                 ))}
               </div>
             </div>
-
+ 
             {/* Negotiation Offer & Smart Inquiry Side-by-Side Panel */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
               
               {/* Offer & Negotiation System Card */}
-              <div className="bg-[#121216] border border-neutral-800 rounded-3xl p-6 shadow-[0_4px_25px_rgba(0,0,0,0.3)] space-y-4">
-                <div className="flex items-center gap-2 text-[#d4af37]">
-                  <DollarSign className="h-4.5 w-4.5 text-amber-500" />
-                  <span className="text-[10px] font-mono tracking-widest uppercase font-bold text-amber-500">Acquisition Negotiation</span>
+              <div className="bg-white border border-[#E2E8F0] rounded-3xl p-6 shadow-[0_4px_20px_rgba(15,23,42,0.04)] space-y-4">
+                <div className="flex items-center gap-2 text-[#2563EB] font-sans font-bold">
+                  <DollarSign className="h-4.5 w-4.5 text-[#2563EB]" />
+                  <span className="text-[10px] font-mono tracking-widest uppercase">Acquisition Negotiation</span>
                 </div>
-
+ 
                 <div>
-                  <h3 className="text-xs font-bold font-display uppercase tracking-wider text-white">Offer & Negotiation</h3>
-                  <p className="text-[10px] text-neutral-400 mt-1">Submit non-binding leasing or procurement proposals on this allocation.</p>
+                  <h3 className="text-xs font-bold font-display uppercase tracking-wider text-[#0F172A]">Offer & Negotiation</h3>
+                  <p className="text-[10px] text-[#475569] mt-1">Submit non-binding leasing or procurement proposals on this allocation.</p>
                 </div>
-
+ 
                 {offerSuccess ? (
-                  <div className="p-4 bg-emerald-950/20 border border-emerald-800/40 rounded-2xl text-emerald-400 space-y-2">
+                  <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-2xl text-[#16A34A] space-y-2">
                     <p className="text-xs font-bold font-sans">Offer Submitted Successfully!</p>
                     <p className="text-[11px] leading-relaxed font-medium">Your pricing offer has been synchronized to the secure administrator terminal. A representative will contact you shortly.</p>
                     <button
                       type="button"
                       onClick={() => setOfferSuccess(false)}
-                      className="text-[10px] uppercase tracking-wider font-bold text-white underline hover:opacity-85 pt-1 block"
+                      className="text-[10px] uppercase tracking-wider font-bold text-[#2563EB] underline hover:opacity-85 pt-1 block cursor-pointer"
                     >
                       Submit another offer
                     </button>
@@ -749,69 +752,69 @@ Message: ${inquiryMessage}`,
                   <form onSubmit={handleOfferSubmit} className="space-y-3 font-sans">
                     <div className="space-y-3">
                       <div className="space-y-1">
-                        <label className="block text-[10px] uppercase font-mono text-neutral-400 font-bold">Contact Name *</label>
+                        <label className="block text-[10px] uppercase font-mono text-[#475569] font-bold font-sans">Contact Name *</label>
                         <input
                           type="text"
                           required
                           value={offerName}
                           onChange={(e) => setOfferName(e.target.value)}
                           placeholder="Your Name"
-                          className="w-full bg-neutral-950 border border-neutral-800 focus:border-[#d4af37] rounded-xl px-3.5 py-2.5 text-xs text-white outline-none placeholder-neutral-700"
+                          className="w-full bg-[#F8FAFC] border border-[#E2E8F0] focus:border-[#2563EB] rounded-xl px-3.5 py-2.5 text-xs text-[#0F172A] outline-none placeholder-[#94A3B8]"
                         />
                       </div>
                       <div className="grid grid-cols-2 gap-3">
                         <div className="space-y-1">
-                          <label className="block text-[10px] uppercase font-mono text-neutral-400 font-bold">Email Address *</label>
+                          <label className="block text-[10px] uppercase font-mono text-[#475569] font-bold font-sans">Email Address *</label>
                           <input
                             type="email"
                             required
                             value={offerEmail}
                             onChange={(e) => setOfferEmail(e.target.value)}
                             placeholder="you@example.com"
-                            className="w-full bg-neutral-950 border border-neutral-800 focus:border-[#d4af37] rounded-xl px-3.5 py-2.5 text-xs text-white outline-none placeholder-neutral-700 font-sans"
+                            className="w-full bg-[#F8FAFC] border border-[#E2E8F0] focus:border-[#2563EB] rounded-xl px-3.5 py-2.5 text-xs text-[#0F172A] outline-none placeholder-[#94A3B8] font-sans"
                           />
                         </div>
                         <div className="space-y-1">
-                          <label className="block text-[10px] uppercase font-mono text-neutral-400 font-bold">Phone Number *</label>
+                          <label className="block text-[10px] uppercase font-mono text-[#475569] font-bold font-sans">Phone Number *</label>
                           <input
                             type="tel"
                             required
                             value={offerPhone}
                             onChange={(e) => setOfferPhone(e.target.value)}
                             placeholder="+1 (555) 000-0000"
-                            className="w-full bg-neutral-950 border border-neutral-800 focus:border-[#d4af37] rounded-xl px-3.5 py-2.5 text-xs text-white outline-none placeholder-neutral-700 font-mono"
+                            className="w-full bg-[#F8FAFC] border border-[#E2E8F0] focus:border-[#2563EB] rounded-xl px-3.5 py-2.5 text-xs text-[#0F172A] outline-none placeholder-[#94A3B8] font-mono"
                           />
                         </div>
                       </div>
                     </div>
-
+ 
                     <div className="space-y-1">
-                      <label className="block text-[10px] uppercase font-mono text-neutral-400 font-bold">Offer Amount (USD $) *</label>
+                      <label className="block text-[10px] uppercase font-mono text-[#475569] font-bold font-sans">Offer Amount (USD $) *</label>
                       <input
                         type="number"
                         required
                         value={offerAmount}
                         onChange={(e) => setOfferAmount(e.target.value)}
                         placeholder="e.g. 4500"
-                        className="w-full bg-neutral-950 border border-neutral-800 focus:border-[#d4af37] rounded-xl px-3.5 py-2.5 text-xs text-white outline-none font-mono placeholder-neutral-700"
+                        className="w-full bg-[#F8FAFC] border border-[#E2E8F0] focus:border-[#2563EB] rounded-xl px-3.5 py-2.5 text-xs text-[#0F172A] outline-none font-mono placeholder-[#94A3B8]"
                       />
                     </div>
-
+ 
                     <div className="space-y-1">
-                      <label className="block text-[10px] uppercase font-mono text-neutral-400 font-bold">Message or Terms Proposal</label>
+                      <label className="block text-[10px] uppercase font-mono text-[#475569] font-bold font-sans">Message or Terms Proposal</label>
                       <textarea
                         value={offerMessage}
                         onChange={(e) => setOfferMessage(e.target.value)}
                         placeholder="Detail payment schedules, fitout requirements, or specific contingencies..."
                         rows={2}
-                        className="w-full bg-neutral-950 border border-neutral-800 focus:border-[#d4af37] rounded-xl px-3.5 py-2.5 text-xs text-white outline-none placeholder-neutral-700 resize-none font-sans"
+                        className="w-full bg-[#F8FAFC] border border-[#E2E8F0] focus:border-[#2563EB] rounded-xl px-3.5 py-2.5 text-xs text-[#0F172A] outline-none placeholder-[#94A3B8] resize-none font-sans"
                       />
                     </div>
-
+ 
                     <button
                       type="submit"
                       disabled={offerLoading}
-                      className="w-full bg-[#d4af37] hover:opacity-90 disabled:opacity-40 text-black py-2.5 rounded-xl font-display font-extrabold uppercase text-[10px] text-center tracking-wider transition-all"
+                      className="w-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white py-2.5 rounded-xl font-display font-extrabold uppercase text-[10px] text-center tracking-wider transition-all cursor-pointer shadow-md shadow-blue-500/10"
                     >
                       {offerLoading ? <Loader2 className="h-4 w-4 animate-spin mx-auto" /> : "Submit Negotiation Offer"}
                     </button>
@@ -820,25 +823,25 @@ Message: ${inquiryMessage}`,
               </div>
 
               {/* Smart Inquiry System ("Ask About This Store") Form */}
-              <div className="bg-[#121216] border border-neutral-800 rounded-3xl p-6 shadow-[0_4px_25px_rgba(0,0,0,0.3)] space-y-4">
-                <div className="flex items-center gap-2 text-[#d4af37]">
-                  <Send className="h-4.5 w-4.5 text-amber-500" />
-                  <span className="text-[10px] font-mono tracking-widest uppercase font-bold text-amber-500">Corporate Inquiries</span>
+              <div className="bg-white border border-[#E2E8F0] rounded-3xl p-6 shadow-[0_4px_20px_rgba(15,23,42,0.04)] space-y-4">
+                <div className="flex items-center gap-2 text-[#2563EB] font-sans font-bold">
+                  <Send className="h-4.5 w-4.5 text-[#2563EB]" />
+                  <span className="text-[10px] font-mono tracking-widest uppercase">Corporate Inquiries</span>
                 </div>
-
+ 
                 <div>
-                  <h3 className="text-xs font-bold font-display uppercase tracking-wider text-white">Ask About This Store</h3>
-                  <p className="text-[10px] text-neutral-400 mt-1">Submit direct questions regarding spacing, utilities, layout dimensions or zoning.</p>
+                  <h3 className="text-xs font-bold font-display uppercase tracking-wider text-[#0F172A]">Ask About This Store</h3>
+                  <p className="text-[10px] text-[#475569] mt-1">Submit direct questions regarding spacing, utilities, layout dimensions or zoning.</p>
                 </div>
-
+ 
                 {inquirySuccess ? (
-                  <div className="p-4 bg-emerald-950/20 border border-emerald-800/40 rounded-2xl text-emerald-400 space-y-2">
+                  <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-2xl text-[#16A34A] space-y-2">
                     <p className="text-xs font-bold font-sans">Inquiry Dispatched Successfully!</p>
                     <p className="text-[11px] leading-relaxed font-medium">Your inquiry has been linked directly to our real-time messaging pipeline. Concierge agents will reply locally via live support.</p>
                     <button
                       type="button"
                       onClick={() => setInquirySuccess(false)}
-                      className="text-[10px] uppercase tracking-wider font-bold text-white underline hover:opacity-85 pt-1 block"
+                      className="text-[10px] uppercase tracking-wider font-bold text-[#2563EB] underline hover:opacity-85 pt-1 block cursor-pointer"
                     >
                       Submit another inquiry
                     </button>
@@ -847,45 +850,45 @@ Message: ${inquiryMessage}`,
                   <form onSubmit={handleInquirySubmit} className="space-y-3 font-sans">
                     <div className="grid grid-cols-2 gap-3">
                       <div className="space-y-1">
-                        <label className="block text-[10px] uppercase font-mono text-neutral-400 font-bold">Your Name *</label>
+                        <label className="block text-[10px] uppercase font-mono text-[#475569] font-bold font-sans">Your Name *</label>
                         <input
                           type="text"
                           required
                           value={inquiryName}
                           onChange={(e) => setInquiryName(e.target.value)}
                           placeholder="Your Name"
-                          className="w-full bg-neutral-950 border border-neutral-800 focus:border-[#d4af37] rounded-xl px-3.5 py-2.5 text-xs text-white outline-none placeholder-neutral-700"
+                          className="w-full bg-[#F8FAFC] border border-[#E2E8F0] focus:border-[#2563EB] rounded-xl px-3.5 py-2.5 text-xs text-[#0F172A] outline-none placeholder-[#94A3B8]"
                         />
                       </div>
                       <div className="space-y-1">
-                        <label className="block text-[10px] uppercase font-mono text-neutral-400 font-bold">Email Address *</label>
+                        <label className="block text-[10px] uppercase font-mono text-[#475569] font-bold font-sans">Email Address *</label>
                         <input
                           type="email"
                           required
                           value={inquiryEmail}
                           onChange={(e) => setInquiryEmail(e.target.value)}
                           placeholder="you@example.com"
-                          className="w-full bg-neutral-950 border border-neutral-800 focus:border-[#d4af37] rounded-xl px-3.5 py-2.5 text-xs text-white outline-none placeholder-neutral-700"
+                          className="w-full bg-[#F8FAFC] border border-[#E2E8F0] focus:border-[#2563EB] rounded-xl px-3.5 py-2.5 text-xs text-[#0F172A] outline-none placeholder-[#94A3B8]"
                         />
                       </div>
                     </div>
-
+ 
                     <div className="space-y-1">
-                      <label className="block text-[10px] uppercase font-mono text-neutral-400 font-bold">Inquiry Message *</label>
+                      <label className="block text-[10px] uppercase font-mono text-[#475569] font-bold font-sans">Inquiry Message *</label>
                       <textarea
                         required
                         value={inquiryMessage}
                         onChange={(e) => setInquiryMessage(e.target.value)}
                         placeholder="e.g. Can we expand the ceiling heights or combine double bays?"
                         rows={3}
-                        className="w-full bg-neutral-950 border border-neutral-800 focus:border-[#d4af37] rounded-xl px-3.5 py-2.5 text-xs text-white outline-none placeholder-neutral-700 resize-none font-sans"
+                        className="w-full bg-[#F8FAFC] border border-[#E2E8F0] focus:border-[#2563EB] rounded-xl px-3.5 py-2.5 text-xs text-[#0F172A] outline-none placeholder-[#94A3B8] resize-none font-sans"
                       />
                     </div>
-
+ 
                     <button
                       type="submit"
                       disabled={inquiryLoading}
-                      className="w-full bg-neutral-900 border border-neutral-800 hover:border-[#d4af37] text-white disabled:opacity-40 py-2.5 rounded-xl font-display font-bold uppercase text-[10px] text-center tracking-wider transition-all"
+                      className="w-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white py-2.5 rounded-xl font-display font-bold uppercase text-[10px] text-center tracking-wider transition-all cursor-pointer shadow-md shadow-blue-500/10"
                     >
                       {inquiryLoading ? <Loader2 className="h-4 w-4 animate-spin mx-auto" /> : "Dispatch Message"}
                     </button>
@@ -899,35 +902,33 @@ Message: ${inquiryMessage}`,
 
         </div>
 
-      </div>
- 
-      {/* Booking Lease simulation modular form */}
+      </div>      {/* Booking Lease simulation modular form */}
       {modalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in font-sans">
-          <div className="bg-[#121216] border border-neutral-800 rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-[0_8px_40px_rgba(0,0,0,0.8)] relative text-white">
-            <h3 className="text-lg font-display font-extrabold text-[#d4af37] mb-1 rounded uppercase tracking-wide">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md animate-fade-in font-sans animate-fade-in">
+          <div className="bg-white border border-[#E2E8F0] rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-[0_10px_40px_rgba(15,23,42,0.15)] relative text-[#0F172A]">
+            <h3 className="text-lg font-display font-extrabold text-[#2563EB] mb-1 uppercase tracking-wide">
               Commercial Acquisition
             </h3>
-            <p className="text-xs text-neutral-400 mb-6 font-sans">
-              Securing spaces: <span className="text-white font-bold">{store.storeName}</span> ({store.trackingCode}). Complete details below to request priority tenant reservation.
+            <p className="text-xs text-[#475569] mb-6 font-sans">
+              Securing spaces: <span className="text-[#0F172A] font-bold">{store.storeName}</span> ({store.trackingCode}). Complete details below to request priority tenant reservation.
             </p>
-
+ 
             {success ? (
-              <div className="text-center py-6 space-y-4 animate-fade-in text-white">
-                <div className="w-14 h-14 rounded-full bg-emerald-950 border border-emerald-500 flex items-center justify-center mx-auto text-emerald-400 shadow-lg">
+              <div className="text-center py-6 space-y-4 animate-fade-in text-[#0F172A]">
+                <div className="w-14 h-14 rounded-full bg-emerald-50 border border-emerald-200 flex items-center justify-center mx-auto text-[#16A34A] shadow-md">
                   <Check className="h-7 w-7" />
                 </div>
-                <h4 className="text-base font-bold font-display text-white">Allocation Request Submitted!</h4>
-                <p className="text-xs text-neutral-300 leading-relaxed max-w-sm mx-auto p-1 text-center font-sans">
-                  Excellent! Your allocation request for <span className="font-bold text-white">{store.storeName}</span> has been received with tracking reference <span className="font-mono font-bold text-[#d4af37] tracking-wider bg-black px-1.5 py-0.5 rounded border border-neutral-800">{store.trackingCode}</span>.
+                <h4 className="text-base font-bold font-display text-[#0F172A]">Allocation Request Submitted!</h4>
+                <p className="text-xs text-[#475569] leading-relaxed max-w-sm mx-auto p-1 text-center font-sans">
+                  Excellent! Your allocation request for <span className="font-bold text-[#0F172A]">{store.storeName}</span> has been received with tracking reference <span className="font-mono font-bold text-[#2563EB] tracking-wider bg-[#F8FAFC] px-1.5 py-0.5 rounded border border-[#E2E8F0]">{store.trackingCode}</span>.
                 </p>
-                <div className="bg-neutral-950 border border-neutral-850 p-4 rounded-2xl text-left text-xs space-y-2.5 font-mono text-neutral-300 max-w-sm mx-auto">
-                  <p className="text-[10px] text-neutral-500 uppercase font-bold">Request Registry:</p>
-                  <p><span className="text-neutral-500">Applicant:</span> {customerName}</p>
-                  <p><span className="text-neutral-500">Email:</span> {emailStr}</p>
-                  <p><span className="text-neutral-500">Phone:</span> {phoneStr}</p>
-                  <p><span className="text-neutral-500">Proposed Rate:</span> ${Number(requestedAmount || store.monthlyLease).toLocaleString()}/mo</p>
-                  <p><span className="text-neutral-500">Status:</span> <span className="text-amber-400 bg-amber-950/40 font-bold border border-amber-800 px-1 rounded">PENDING_ADMIN_APPROVAL</span></p>
+                <div className="bg-[#F8FAFC] border border-[#E2E8F0] p-4 rounded-2xl text-left text-xs space-y-2.5 font-mono text-[#0F172A] max-w-sm mx-auto">
+                  <p className="text-[10px] text-[#475569] uppercase font-bold font-sans">Request Registry:</p>
+                  <p><span className="text-[#475569]">Applicant:</span> {customerName}</p>
+                  <p><span className="text-[#475569]">Email:</span> {emailStr}</p>
+                  <p><span className="text-[#475569]">Phone:</span> {phoneStr}</p>
+                  <p><span className="text-[#475569]">Proposed Rate:</span> ${Number(requestedAmount || store.monthlyLease).toLocaleString()}/mo</p>
+                  <p><span className="text-[#475569]">Status:</span> <span className="text-amber-600 bg-amber-50 font-bold border border-amber-200 px-1 rounded">PENDING_ADMIN_APPROVAL</span></p>
                 </div>
                 <button
                   type="button"
@@ -939,7 +940,7 @@ Message: ${inquiryMessage}`,
                     setPhoneStr('');
                     setNotesStr('');
                   }}
-                  className="w-full max-w-sm mx-auto bg-[#d4af37] hover:bg-[#c49e27] text-black font-extrabold py-3.5 rounded-xl text-xs uppercase tracking-wider cursor-pointer transition-colors block"
+                  className="w-full max-w-sm mx-auto bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-extrabold py-3.5 rounded-xl text-xs uppercase tracking-wider cursor-pointer transition-colors block"
                 >
                   Return to Store Details
                 </button>
@@ -948,69 +949,69 @@ Message: ${inquiryMessage}`,
               <form onSubmit={handleLeaseSubmit} className="space-y-4 text-xs font-normal">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-neutral-400 mb-1.5 font-bold uppercase tracking-wider text-[10px]">Full Name *</label>
+                    <label className="block text-[#475569] mb-1.5 font-bold uppercase tracking-wider text-[10px]">Full Name *</label>
                     <input
                       type="text"
                       required
                       value={customerName}
                       onChange={(e) => setCustomerName(e.target.value)}
                       placeholder="Jane Doe"
-                      className="w-full bg-neutral-950 border border-neutral-850 focus:border-[#d4af37] text-white rounded-xl px-4 py-3 outline-none text-xs"
+                      className="w-full bg-[#F8FAFC] border border-[#E2E8F0] focus:border-[#2563EB] text-[#0F172A] rounded-xl px-4 py-3 outline-none text-xs"
                     />
                   </div>
                   <div>
-                    <label className="block text-neutral-400 mb-1.5 font-bold uppercase tracking-wider text-[10px]">Contact Email *</label>
+                    <label className="block text-[#475569] mb-1.5 font-bold uppercase tracking-wider text-[10px]">Contact Email *</label>
                     <input
                       type="email"
                       required
                       value={emailStr}
                       onChange={(e) => setEmailStr(e.target.value)}
                       placeholder="jane@example.com"
-                      className="w-full bg-neutral-950 border border-neutral-850 focus:border-[#d4af37] text-white rounded-xl px-4 py-3 outline-none text-xs"
+                      className="w-full bg-[#F8FAFC] border border-[#E2E8F0] focus:border-[#2563EB] text-[#0F172A] rounded-xl px-4 py-3 outline-none text-xs"
                     />
                   </div>
                 </div>
-
+ 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-neutral-400 mb-1.5 font-bold uppercase tracking-wider text-[10px]">Contact Phone *</label>
+                    <label className="block text-[#475569] mb-1.5 font-bold uppercase tracking-wider text-[10px]">Contact Phone *</label>
                     <input
                       type="tel"
                       required
                       value={phoneStr}
                       onChange={(e) => setPhoneStr(e.target.value)}
                       placeholder="+1 555-0199"
-                      className="w-full bg-neutral-950 border border-neutral-850 focus:border-[#d4af37] text-white rounded-xl px-4 py-3 outline-none font-mono text-xs"
+                      className="w-full bg-[#F8FAFC] border border-[#E2E8F0] focus:border-[#2563EB] text-[#0F172A] rounded-xl px-4 py-3 outline-none font-mono text-xs"
                     />
                   </div>
                   <div>
-                    <label className="block text-neutral-400 mb-1.5 font-bold uppercase tracking-wider text-[10px]">Proposed Offer Amount ($/mo) *</label>
+                    <label className="block text-[#475569] mb-1.5 font-bold uppercase tracking-wider text-[10px]">Proposed Offer Amount ($/mo) *</label>
                     <input
                       type="number"
                       required
                       value={requestedAmount}
                       onChange={(e) => setRequestedAmount(e.target.value)}
-                      className="w-full bg-neutral-950 border border-neutral-850 focus:border-[#d4af37] text-white rounded-xl px-4 py-3 outline-none font-mono text-xs"
+                      className="w-full bg-[#F8FAFC] border border-[#E2E8F0] focus:border-[#2563EB] text-[#0F172A] rounded-xl px-4 py-3 outline-none font-mono text-xs"
                     />
                   </div>
                 </div>
-
+ 
                 <div>
-                  <label className="block text-neutral-400 mb-1.5 font-bold uppercase tracking-wider text-[10px]">Notes & Intended Brand Use</label>
+                  <label className="block text-[#475569] mb-1.5 font-bold uppercase tracking-wider text-[10px]">Notes & Intended Brand Use</label>
                   <textarea
                     rows={3}
                     value={notesStr}
                     onChange={(e) => setNotesStr(e.target.value)}
                     placeholder="Provide details about your business and proposed timeline..."
-                    className="w-full bg-neutral-950 border border-neutral-850 focus:border-[#d4af37] text-white rounded-xl px-4 py-3 outline-none text-xs"
+                    className="w-full bg-[#F8FAFC] border border-[#E2E8F0] focus:border-[#2563EB] text-[#0F172A] rounded-xl px-4 py-3 outline-none text-xs text-[#0F172A]"
                   ></textarea>
                 </div>
-
-                <div className="flex gap-3 pt-5 border-t border-neutral-900">
+ 
+                <div className="flex gap-3 pt-5 border-t border-[#E2E8F0]">
                   <button
                     type="button"
                     onClick={() => setModalOpen(false)}
-                    className="flex-1 bg-neutral-900 hover:bg-neutral-800 text-neutral-300 py-3.5 rounded-xl font-bold uppercase tracking-wider transition-all cursor-pointer text-center text-xs"
+                    className="flex-1 bg-[#F8FAFC] border border-[#E2E8F0] hover:bg-slate-50 text-[#475569] py-3.5 rounded-xl font-bold uppercase tracking-wider transition-all cursor-pointer text-center text-xs"
                   >
                     Cancel
                   </button>
@@ -1018,10 +1019,10 @@ Message: ${inquiryMessage}`,
                     type="submit"
                     disabled={loading}
                     id="submit-virtual-lease-btn"
-                    className="flex-1 bg-[#d4af37] hover:bg-[#c49e27] text-black py-3.5 rounded-xl font-extrabold uppercase tracking-wider cursor-pointer transition-all flex items-center justify-center gap-1.5 text-xs"
+                    className="flex-1 bg-[#2563EB] hover:bg-[#1D4ED8] text-white py-3.5 rounded-xl font-extrabold uppercase tracking-wider cursor-pointer transition-all flex items-center justify-center gap-1.5 text-xs shadow-md shadow-blue-500/10"
                   >
                     {loading ? (
-                      <Loader2 className="h-4.5 w-4.5 animate-spin text-black" />
+                      <Loader2 className="h-4.5 w-4.5 animate-spin text-white" />
                     ) : (
                       "Lock Allocation"
                     )}

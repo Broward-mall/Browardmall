@@ -1118,11 +1118,11 @@ export default function AdminPanel({
           </div>
 
           {/* Nav actions links */}
-          <nav className="space-y-1.5 text-xs font-semibold">
+          <nav className="space-y-1.5 text-xs font-semibold font-sans">
             <button
               onClick={() => { setActiveTab('dashboard'); setMobileMenuOpen(false); }}
               className={`w-full py-2.5 px-4 rounded-xl transition-all flex items-center gap-3 cursor-pointer ${
-                activeTab === 'dashboard' ? 'bg-black text-white' : 'text-gray-500 hover:text-black hover:bg-gray-50'
+                activeTab === 'dashboard' ? 'bg-[rgba(37,99,235,0.12)] text-[#2563EB]' : 'text-slate-600 hover:text-[#2563EB] hover:bg-slate-50'
               }`}
             >
               <TrendingUp className="h-4 w-4 shrink-0" />
@@ -1131,7 +1131,7 @@ export default function AdminPanel({
             <button
               onClick={() => { setActiveTab('stores'); setMobileMenuOpen(false); }}
               className={`w-full py-2.5 px-4 rounded-xl transition-all flex items-center gap-3 cursor-pointer ${
-                activeTab === 'stores' ? 'bg-black text-white' : 'text-gray-500 hover:text-black hover:bg-gray-50'
+                activeTab === 'stores' ? 'bg-[rgba(37,99,235,0.12)] text-[#2563EB]' : 'text-slate-600 hover:text-[#2563EB] hover:bg-slate-50'
               }`}
             >
               <Sliders className="h-4 w-4 shrink-0" />
@@ -1140,7 +1140,7 @@ export default function AdminPanel({
             <button
               onClick={() => { handleCreateNewClick(); setMobileMenuOpen(false); }}
               className={`w-full py-2.5 px-4 rounded-xl transition-all flex items-center gap-3 cursor-pointer ${
-                activeTab === 'create_edit' && !editingStore ? 'bg-black text-white' : 'text-gray-500 hover:text-black hover:bg-gray-50'
+                activeTab === 'create_edit' && !editingStore ? 'bg-[rgba(37,99,235,0.12)] text-[#2563EB]' : 'text-slate-600 hover:text-[#2563EB] hover:bg-slate-50'
               }`}
             >
               <Plus className="h-4 w-4 shrink-0" />
@@ -1149,7 +1149,7 @@ export default function AdminPanel({
             <button
               onClick={() => { setActiveTab('messages'); setMobileMenuOpen(false); }}
               className={`w-full py-2.5 px-4 rounded-xl transition-all flex items-center justify-between cursor-pointer ${
-                activeTab === 'messages' ? 'bg-black text-white' : 'text-gray-500 hover:text-black hover:bg-gray-50'
+                activeTab === 'messages' ? 'bg-[rgba(37,99,235,0.12)] text-[#2563EB]' : 'text-slate-600 hover:text-[#2563EB] hover:bg-slate-50'
               }`}
             >
               <div className="flex items-center gap-3">
@@ -1157,7 +1157,7 @@ export default function AdminPanel({
                 <span>Live Messages</span>
               </div>
               {activeConversations > 0 && (
-                <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full ${activeTab === 'messages' ? 'bg-white text-black' : 'bg-black text-white'}`}>
+                <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded-full ${activeTab === 'messages' ? 'bg-[#2563EB] text-white' : 'bg-[#E2E8F0] text-slate-800'}`}>
                   {activeConversations}
                 </span>
               )}
@@ -1165,7 +1165,7 @@ export default function AdminPanel({
             <button
               onClick={() => { setActiveTab('lander'); setMobileMenuOpen(false); }}
               className={`w-full py-2.5 px-4 rounded-xl transition-all flex items-center gap-3 cursor-pointer ${
-                activeTab === 'lander' ? 'bg-black text-white' : 'text-gray-500 hover:text-black hover:bg-gray-50'
+                activeTab === 'lander' ? 'bg-[rgba(37,99,235,0.12)] text-[#2563EB]' : 'text-slate-600 hover:text-[#2563EB] hover:bg-slate-50'
               }`}
             >
               <Globe className="h-4 w-4 shrink-0" />
@@ -1174,7 +1174,7 @@ export default function AdminPanel({
             <button
               onClick={() => { setActiveTab('media'); setMobileMenuOpen(false); }}
               className={`w-full py-2.5 px-4 rounded-xl transition-all flex items-center gap-3 cursor-pointer ${
-                activeTab === 'media' ? 'bg-black text-white' : 'text-gray-500 hover:text-black hover:bg-gray-50'
+                activeTab === 'media' ? 'bg-[rgba(37,99,235,0.12)] text-[#2563EB]' : 'text-slate-600 hover:text-[#2563EB] hover:bg-slate-50'
               }`}
             >
               <ImageIcon className="h-4 w-4 shrink-0" />
@@ -1183,7 +1183,7 @@ export default function AdminPanel({
             <button
               onClick={() => { setActiveTab('keys'); setMobileMenuOpen(false); }}
               className={`w-full py-2.5 px-4 rounded-xl transition-all flex items-center gap-3 cursor-pointer ${
-                activeTab === 'keys' ? 'bg-black text-white' : 'text-gray-500 hover:text-black hover:bg-gray-50'
+                activeTab === 'keys' ? 'bg-[rgba(37,99,235,0.12)] text-[#2563EB]' : 'text-slate-600 hover:text-[#2563EB] hover:bg-slate-50'
               }`}
             >
               <KeyRound className="h-4 w-4 shrink-0" />
@@ -1192,7 +1192,7 @@ export default function AdminPanel({
             <button
               onClick={() => { setActiveTab('allocations'); setMobileMenuOpen(false); }}
               className={`w-full py-2.5 px-4 rounded-xl transition-all flex items-center gap-3 cursor-pointer ${
-                activeTab === 'allocations' ? 'bg-black text-white' : 'text-gray-500 hover:text-black hover:bg-gray-50'
+                activeTab === 'allocations' ? 'bg-[rgba(37,99,235,0.12)] text-[#2563EB]' : 'text-slate-600 hover:text-[#2563EB] hover:bg-slate-50'
               }`}
             >
               <ShieldAlert className="h-4 w-4 shrink-0" />
@@ -1201,7 +1201,7 @@ export default function AdminPanel({
             <button
               onClick={() => { setActiveTab('negotiations'); setMobileMenuOpen(false); }}
               className={`w-full py-2.5 px-4 rounded-xl transition-all flex items-center gap-3 cursor-pointer ${
-                activeTab === 'negotiations' ? 'bg-black text-white' : 'text-gray-500 hover:text-black hover:bg-gray-50'
+                activeTab === 'negotiations' ? 'bg-[rgba(37,99,235,0.12)] text-[#2563EB]' : 'text-slate-600 hover:text-[#2563EB] hover:bg-slate-50'
               }`}
             >
               <Landmark className="h-4 w-4 shrink-0" />
@@ -1210,7 +1210,7 @@ export default function AdminPanel({
             <button
               onClick={() => { setActiveTab('inquiries'); setMobileMenuOpen(false); }}
               className={`w-full py-2.5 px-4 rounded-xl transition-all flex items-center gap-3 cursor-pointer ${
-                activeTab === 'inquiries' ? 'bg-black text-white' : 'text-gray-500 hover:text-black hover:bg-gray-50'
+                activeTab === 'inquiries' ? 'bg-[rgba(37,99,235,0.12)] text-[#2563EB]' : 'text-slate-600 hover:text-[#2563EB] hover:bg-slate-50'
               }`}
             >
               <Mail className="h-4 w-4 shrink-0" />

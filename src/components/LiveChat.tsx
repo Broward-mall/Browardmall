@@ -127,7 +127,7 @@ export default function LiveChat() {
         <button
           onClick={() => setIsOpen(true)}
           id="chat-toggle-btn"
-          className="flex items-center justify-center w-14 h-14 bg-black text-white rounded-full shadow-xl hover:bg-gray-800 transition-all duration-300 transform hover:scale-105 select-none focus:outline-none focus:ring-2 focus:ring-gray-300 cursor-pointer"
+          className="flex items-center justify-center w-14 h-14 bg-[#2563EB] text-white rounded-full shadow-xl hover:bg-[#1D4ED8] transition-all duration-300 transform hover:scale-105 select-none focus:outline-none focus:ring-2 focus:ring-blue-300 cursor-pointer"
         >
           <MessageSquare className="h-6 w-6" />
         </button>
@@ -135,7 +135,7 @@ export default function LiveChat() {
 
       {/* Modern Compact SaaS chat card window */}
       {isOpen && (
-        <div className="w-80 sm:w-96 bg-white border border-gray-100 rounded-2xl shadow-[0_10px_35px_-5px_rgba(0,0,0,0.1),0_5px_15px_-5px_rgba(0,0,0,0.04)] overflow-hidden flex flex-col h-[460px] animate-fade-in text-gray-900 border-t-4 border-t-black">
+        <div className="w-80 sm:w-96 bg-white border border-gray-100 rounded-2xl shadow-[0_10px_35px_-5px_rgba(0,0,0,0.1),0_5px_15px_-5px_rgba(0,0,0,0.04)] overflow-hidden flex flex-col h-[460px] animate-fade-in text-gray-900 border-t-4 border-t-[#2563EB]">
           
           {/* Header section */}
           <div className="px-5 py-4 bg-gray-50 border-b border-gray-100 flex items-center justify-between">
@@ -172,7 +172,7 @@ export default function LiveChat() {
                   <div key={msg.id} className={`flex flex-col ${isUser ? 'items-end' : 'items-start'}`}>
                     <div className={`max-w-[80%] rounded-2xl px-4 py-2.5 text-xs font-medium leading-relaxed ${
                       isUser
-                        ? 'bg-black text-white rounded-br-none'
+                        ? 'bg-[#2563EB] text-white rounded-br-none shadow-md shadow-blue-500/10'
                         : 'bg-gray-100 text-gray-800 rounded-bl-none'
                     }`}>
                       {msg.text}
@@ -194,12 +194,12 @@ export default function LiveChat() {
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               placeholder="Type message..."
-              className="flex-1 bg-white border border-gray-200 focus:border-gray-500 rounded-xl px-3.5 py-2 text-xs outline-none focus:ring-1 focus:ring-gray-300 text-gray-900"
+              className="flex-1 bg-white border border-gray-200 focus:border-gray-500 rounded-xl px-3.5 py-2 text-xs outline-none focus:ring-1 focus:ring-blue-300 text-gray-900"
             />
             <button
               type="submit"
               disabled={loading || !inputText.trim()}
-              className="bg-black hover:bg-gray-800 disabled:bg-gray-200 text-white disabled:text-gray-400 px-3 py-2 rounded-xl text-xs font-bold transition-colors cursor-pointer flex items-center justify-center shrink-0"
+              className="bg-[#2563EB] hover:bg-[#1D4ED8] disabled:bg-gray-200 text-white disabled:text-gray-400 px-3 py-2 rounded-xl text-xs font-bold transition-colors cursor-pointer flex items-center justify-center shrink-0"
             >
               {loading ? (
                 <Loader2 className="h-3.5 w-3.5 animate-spin" />

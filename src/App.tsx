@@ -325,15 +325,15 @@ export default function App() {
   // Spinner loader on initialization
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen bg-[#0a0a0c] text-white">
-        <Loader2 className="h-10 w-10 text-[#d4af37] animate-spin mb-4" />
-        <span className="font-display font-bold text-xs tracking-wider text-amber-500/90 uppercase">Synchronizing mall database...</span>
+      <div className="flex flex-col items-center justify-center min-h-screen bg-[#F8FAFC] text-[#0F172A]">
+        <Loader2 className="h-10 w-10 text-[#2563EB] animate-spin mb-4" />
+        <span className="font-display font-bold text-xs tracking-wider text-[#475569] uppercase">Synchronizing mall database...</span>
       </div>
     );
   }
 
   return (
-    <div id="broward-mall-root" className="min-h-screen flex flex-col bg-[#0a0a0c] text-white selection:bg-[#d4af37]/35 selection:text-white">
+    <div id="broward-mall-root" className="min-h-screen flex flex-col bg-[#F8FAFC] text-[#0F172A] selection:bg-[#2563EB]/15 selection:text-[#0F172A]">
       <Navbar
         currentRoute={currentRoute}
         onNavigate={handleNavigate}

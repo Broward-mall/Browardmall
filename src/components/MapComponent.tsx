@@ -14,19 +14,19 @@ import 'leaflet/dist/leaflet.css';
 // Precision layout coordinates for Broward Mall (Plantation, FL)
 const BROWARD_MALL_COORDS: [number, number] = [26.1224, -80.2526];
 
-// Custom luxury Gold & Dark SVG pin for standard stores
+// Custom luxury Blue & White SVG pin for standard stores
 const createStoreIcon = (storeName: string, isHighlighted: boolean = false) => {
   const size = isHighlighted ? 'w-10 h-10' : 'w-8 h-8';
-  const color = isHighlighted ? 'bg-amber-500 border-yellow-200 text-black' : 'bg-neutral-900 border-[#d4af37] text-[#d4af37]';
+  const color = isHighlighted ? 'bg-[#2563EB] border-blue-200 text-white shadow-lg' : 'bg-white border-[#2563EB] text-[#2563EB]';
   
   return L.divIcon({
     className: 'custom-store-pin',
     html: `
-      <div class="relative flex items-center justify-center ${size} rounded-full ${color} border-2 shadow-2xl transition-all duration-300 transform hover:scale-110">
+      <div class="relative flex items-center justify-center ${size} rounded-full ${color} border-2 shadow-md transition-all duration-300 transform hover:scale-115">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-4.5 w-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
         </svg>
-        <span class="absolute -bottom-6 left-1/2 -translate-x-1/2 bg-black/90 text-white border border-[#d4af37]/30 text-[10px] px-1.5 py-0.5 rounded whitespace-nowrap opacity-0 hover:opacity-100 transition-opacity duration-200 font-sans shadow-md">
+        <span class="absolute -bottom-6 left-1/2 -translate-x-1/2 bg-[#0F172A] text-white text-[10px] px-1.5 py-0.5 rounded whitespace-nowrap opacity-0 hover:opacity-100 transition-opacity duration-200 font-sans shadow-md">
           ${storeName}
         </span>
       </div>
@@ -41,7 +41,7 @@ const createStoreIcon = (storeName: string, isHighlighted: boolean = false) => {
 const mallIcon = L.divIcon({
   className: 'custom-mall-pin',
   html: `
-    <div class="flex items-center justify-center w-12 h-12 rounded-full bg-black border-2 border-[#d4af37] text-[#d4af37] shadow-[0_0_20px_rgba(212,175,55,0.4)] animate-pulse">
+    <div class="flex items-center justify-center w-12 h-12 rounded-full bg-[#2563EB] border-2 border-white text-white shadow-[0_0_20px_rgba(37,99,235,0.4)] animate-pulse">
       <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
         <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
       </svg>
@@ -124,7 +124,7 @@ export default function MapComponent({
   };
 
   return (
-    <div id="mall-map-container" className="relative w-full rounded-2xl overflow-hidden border border-[#d4af37]/20 shadow-[0_4px_30px_rgba(0,0,0,0.4)] bg-[#111]">
+    <div id="mall-map-container" className="relative w-full rounded-2xl overflow-hidden border border-[#E2E8F0] shadow-[0_4px_20px_rgba(15,23,42,0.08)] bg-white">
       <MapContainer
         center={mapCenter}
         zoom={zoomLevel}
@@ -132,10 +132,10 @@ export default function MapComponent({
         zoomControl={true}
         scrollWheelZoom={true}
       >
-        {/* OpenStreetMap Luxury style tiles from CartoDB Voyager Dark */}
+        {/* OpenStreetMap Luxury style tiles from CartoDB Voyager Light */}
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
-          url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager_labels_under/{z}/{x}/{y}{r}.png"
+          url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
         />
 
         <MapController center={mapCenter} zoom={zoomLevel} force={viewTrigger} />
@@ -143,9 +143,9 @@ export default function MapComponent({
         {/* Mall Base Pin */}
         <Marker position={defaultCoords} icon={mallIcon}>
           <Popup>
-            <div className="p-2 text-neutral-900 font-sans">
-              <h4 className="font-semibold text-sm border-b border-gray-100 pb-1 mb-1 font-display">🏬 {finalMallName}</h4>
-              <p className="text-xs text-neutral-600">{finalMallAddress}</p>
+            <div className="p-2 text-[#0F172A] font-sans">
+              <h4 className="font-semibold text-sm border-b border-[#E2E8F0] pb-1 mb-1 font-display">🏬 {finalMallName}</h4>
+              <p className="text-xs text-[#475569]">{finalMallAddress}</p>
             </div>
           </Popup>
         </Marker>
@@ -162,31 +162,34 @@ export default function MapComponent({
               icon={createStoreIcon(store.storeName, isHighlighted)}
             >
               <Popup>
-                <div className="p-2 text-neutral-900 font-sans min-w-[180px]">
-                  <div className="flex items-center gap-1.5 mb-1.5 border-b border-neutral-100 pb-1.5">
+                <div className="p-2 text-[#0F172A] font-sans min-w-[180px]">
+                  <div className="flex items-center gap-1.5 mb-1.5 border-b border-[#E2E8F0] pb-1.5">
                     {store.logo ? (
                       <img
                         src={store.logo}
                         alt=""
-                        className="w-5 h-5 rounded-full object-cover border border-amber-500/30"
+                        className="w-5 h-5 rounded-full object-cover border border-[#E2E8F0]"
                         id={`map-popup-logo-${store.id || store.trackingCode}`}
                       />
                     ) : (
-                      <span className="w-5 h-5 bg-neutral-900 text-[#d4af37] text-[10px] font-bold flex items-center justify-center rounded-full">S</span>
+                      <span className="w-5 h-5 bg-[#F8FAFC] text-[#2563EB] text-[10px] font-bold flex items-center justify-center rounded-full border border-[#E2E8F0]">S</span>
                     )}
                     <h4 className="font-bold text-xs truncate max-w-[140px]">{store.storeName}</h4>
                   </div>
-                  <p className="text-[11px] text-neutral-600 mb-1">
-                    <span className="font-medium">Floor:</span> {store.floor}
+                  <p className="text-[11px] text-[#475569] mb-1">
+                    <span className="font-medium text-[#0F172A]">Floor:</span> {store.floor}
                   </p>
-                  <p className="text-[11px] text-neutral-600 mb-1">
-                    <span className="font-medium">Size:</span> {store.sizeSqFt.toLocaleString()} sq ft
+                  <p className="text-[11px] text-[#475569] mb-1">
+                    <span className="font-medium text-[#0F172A]">Size:</span> {store.sizeSqFt.toLocaleString()} sq ft
                   </p>
-                  <p className="text-[11px] text-neutral-600 mb-2">
-                    <span className="font-medium">Status:</span>{' '}
-                    <span className={`px-1 rounded text-[10px] font-semibold text-white ${
-                      store.status === 'Available' ? 'bg-emerald-600' :
-                      store.status === 'Sold' ? 'bg-rose-600' : 'bg-amber-600'
+                  <p className="text-[11px] text-[#475569] mb-2">
+                    <span className="font-medium text-[#0F172A]">Status:</span>{' '}
+                    <span className={`px-1.5 py-0.5 rounded text-[10px] font-semibold text-white ${
+                      store.status === 'Available' ? 'bg-[#16A34A]' :
+                      store.status === 'Sold' ? 'bg-[#DC2626]' :
+                      store.status === 'Leased' ? 'bg-[#2563EB]' :
+                      store.status === 'Reserved' ? 'bg-[#F59E0B]' :
+                      store.status === 'Under Negotiation' ? 'bg-orange-600' : 'bg-gray-500'
                     }`}>
                       {store.status}
                     </span>
@@ -196,7 +199,7 @@ export default function MapComponent({
                       type="button"
                       id={`map-select-btn-${store.id || store.trackingCode}`}
                       onClick={() => onSelectStore(store)}
-                      className="w-full bg-[#111] hover:bg-[#d4af37] hover:text-black text-white py-1 px-2 rounded text-[11px] font-medium transition-all duration-300 flex items-center justify-center gap-1 cursor-pointer"
+                      className="w-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white py-1.5 px-2 rounded-lg text-[11px] font-semibold transition-all duration-300 flex items-center justify-center gap-1 cursor-pointer shadow-sm"
                     >
                       <span>View Specifications</span>
                     </button>
@@ -214,7 +217,7 @@ export default function MapComponent({
           type="button"
           id="btn-view-stores-in-mall"
           onClick={handleResetToMall}
-          className="flex items-center gap-1.5 bg-black/90 hover:bg-[#d4af37] text-white hover:text-black border border-[#d4af37]/30 hover:border-[#d4af37] py-2 px-3.5 rounded-full text-xs font-semibold tracking-wider uppercase transition-all duration-300 shadow-lg cursor-pointer"
+          className="flex items-center gap-1.5 bg-white hover:bg-[#2563EB] text-[#475569] hover:text-white border border-[#E2E8F0] py-2 px-3.5 rounded-full text-xs font-semibold tracking-wider uppercase transition-all duration-300 shadow-md cursor-pointer"
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -224,9 +227,9 @@ export default function MapComponent({
         </button>
       </div>
 
-      <div className="absolute top-4 left-4 z-20 bg-black/80 backdrop-blur-md border border-white/10 p-2.5 rounded-lg max-w-[200px]">
-        <h5 className="text-[#d4af37] text-[10px] font-display uppercase tracking-widest font-semibold mb-1">Mall Directory</h5>
-        <p className="text-[11px] text-gray-300 leading-tight">Click on any gold store pin to view dynamic layout options, sizing specifications & details.</p>
+      <div className="absolute top-4 left-4 z-20 bg-white/95 backdrop-blur-md border border-[#E2E8F0] p-3 rounded-xl max-w-[200px] shadow-md">
+        <h5 className="text-[#2563EB] text-[10px] font-display uppercase tracking-widest font-bold mb-1">Mall Directory</h5>
+        <p className="text-[11px] text-[#475569] leading-tight">Click on any store pin to view dynamic layout options, sizing specifications & details.</p>
       </div>
     </div>
   );
