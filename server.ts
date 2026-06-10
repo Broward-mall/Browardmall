@@ -1,7 +1,7 @@
 import "dotenv/config";
 import express from "express";
 import path from "path";
-import PDFDocument from "pdfkit";
+import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 
 // Rate limiting state
 const rateLimits: { [key: string]: { count: number; resetTime: number } } = {};
@@ -124,75 +124,143 @@ async function logEmailRequestRest(cleanCode: string, cleanEmail: string, status
 }
 
 // Generate Certificate PDF buffer
-function generateCertificatePDF(store: any): Promise<Buffer> {
-  return new Promise((resolve, reject) => {
-    const doc = new PDFDocument({ size: "A4", layout: "landscape", margin: 40 });
-    const chunks: Buffer[] = [];
-    doc.on("data", (chunk) => chunks.push(chunk));
-    doc.on("end", () => resolve(Buffer.concat(chunks)));
-    doc.on("error", (err) => reject(err));
+async function generateCertificatePDF(store: any): Promise<Buffer> {
+  const pdfDoc = await PDFDocument.create();
+  
+  // A4 size in landscape (width: 841.89, height: 595.27)
+  const page = pdfDoc.addPage([841.89, 595.27]);
+  
+  const fontHelvetica = await pdfDoc.embedFont(StandardFonts.Helvetica);
+  const fontHelveticaBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+  const fontHelveticaOblique = await pdfDoc.embedFont(StandardFonts.HelveticaOblique);
 
-    // Outer borders
-    doc.strokeColor("#D4AF37").lineWidth(3).rect(20, 20, doc.page.width - 40, doc.page.height - 40).stroke();
-    doc.strokeColor("#D4AF37").lineWidth(1).rect(25, 25, doc.page.width - 50, doc.page.height - 50).stroke();
+  const { width, height } = page.getSize();
 
-    // Headers
-    doc.fillColor("#111111");
-    doc.font("Helvetica-Bold").fontSize(34).text("OFFICIAL CERTIFICATE OF OWNERSHIP", { align: "center" });
-    doc.moveDown(0.2);
-    doc.font("Helvetica").fontSize(13).fillColor("#666666").text("BROWARD MALL SECURE RETAIL REGISTRY", { align: "center" });
-    doc.moveDown(1);
+  // Color mappings
+  const goldColor = rgb(0.831, 0.686, 0.216); // #D4AF37
+  const darkColor = rgb(0.067, 0.09, 0.165); // #111111
+  const grayColor = rgb(0.4, 0.4, 0.4); // #666666
+  const lightGrayColor = rgb(0.898, 0.902, 0.922); // #E5E7EB
 
-    // Decorative line
-    doc.strokeColor("#E5E7EB").lineWidth(1).moveTo(100, doc.y).lineTo(doc.page.width - 100, doc.y).stroke();
-    doc.moveDown(1.5);
-
-    doc.font("Helvetica").fontSize(13).fillColor("#555555").text("This digital registry certificate validates and confirms that the retail allocation designated as:", { align: "center" });
-    doc.moveDown(0.6);
-
-    // Store Name
-    doc.font("Helvetica-Bold").fontSize(26).fillColor("#D4AF37").text(store.storeName.toUpperCase(), { align: "center" });
-    doc.moveDown(0.4);
-
-    doc.font("Helvetica").fontSize(13).fillColor("#555555").text("within the premier retail catalog of", { align: "center" });
-    doc.font("Helvetica-Bold").fontSize(18).fillColor("#111111").text(store.mallName || "Broward Mall Complex", { align: "center" });
-    doc.moveDown(0.6);
-
-    doc.font("Helvetica").fontSize(13).fillColor("#555555").text("is officially registered under the leasehold/proprietary holding of:", { align: "center" });
-    doc.moveDown(0.6);
-
-    // Owner Name
-    doc.font("Helvetica-Bold").fontSize(20).fillColor("#111111").text(store.ownerName?.toUpperCase() || "CREDENTIALED OPERATOR", { align: "center" });
-    doc.moveDown(1.5);
-
-    // Divider
-    doc.strokeColor("#E5E7EB").lineWidth(1).moveTo(80, doc.y).lineTo(doc.page.width - 80, doc.y).stroke();
-    doc.moveDown(1);
-
-    // Metadata details
-    const startY = doc.y;
-    doc.font("Helvetica-Bold").fontSize(10).fillColor("#888888");
-    doc.text("TRACKING CODE", 80, startY);
-    doc.text("REGISTRY LEVEL", 250, startY);
-    doc.text("REGISTRY STATUS", 420, startY);
-    doc.text("EXPIRARY DATE", 590, startY);
-
-    const dataY = startY + 14;
-    doc.font("Helvetica-Bold").fontSize(12).fillColor("#111111");
-    doc.text(store.trackingCode || "N/A", 80, dataY);
-    doc.text(store.floor || "Level 1", 250, dataY);
-    doc.text(store.ownershipType || "Purchased", 420, dataY);
-    
-    const expiryStr = store.expiryDate ? new Date(store.expiryDate).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }) : "Indefinite Allocation";
-    doc.text(expiryStr, 590, dataY);
-
-    // Footer signature
-    doc.moveDown(3.5);
-    doc.font("Helvetica-Bold").fontSize(11).fillColor("#D4AF37").text("BROWARD MALL PLATFORM LEDGER", { align: "center" });
-    doc.font("Helvetica-Oblique").fontSize(8).fillColor("#777777").text("Cryptographically secure document synced and verifiable via proprietary routing tracking ID.", { align: "center" });
-
-    doc.end();
+  // Outer borders
+  page.drawRectangle({
+    x: 20,
+    y: 20,
+    width: width - 40,
+    height: height - 40,
+    borderColor: goldColor,
+    borderWidth: 3,
   });
+
+  page.drawRectangle({
+    x: 25,
+    y: 25,
+    width: width - 50,
+    height: height - 50,
+    borderColor: goldColor,
+    borderWidth: 1,
+  });
+
+  // Helper to draw centered text
+  const drawCenteredText = (text: string, font: any, size: number, y: number, color: any) => {
+    const textWidth = font.widthOfTextAtSize(text, size);
+    page.drawText(text, {
+      x: (width - textWidth) / 2,
+      y: y,
+      size: size,
+      font: font,
+      color: color,
+    });
+  };
+
+  // Header
+  drawCenteredText("OFFICIAL CERTIFICATE OF OWNERSHIP", fontHelveticaBold, 32, height - 90, darkColor);
+  drawCenteredText("BROWARD MALL SECURE RETAIL REGISTRY", fontHelvetica, 13, height - 120, grayColor);
+
+  // Decorative line
+  page.drawLine({
+    start: { x: 100, y: height - 145 },
+    end: { x: width - 100, y: height - 145 },
+    color: lightGrayColor,
+    thickness: 1,
+  });
+
+  // Description
+  drawCenteredText(
+    "This digital registry certificate validates and confirms that the retail allocation designated as:",
+    fontHelvetica,
+    13,
+    height - 180,
+    grayColor
+  );
+
+  // Store Name
+  drawCenteredText((store.storeName || "STORE").toUpperCase(), fontHelveticaBold, 26, height - 225, goldColor);
+
+  // Catalog
+  drawCenteredText("within the premier retail catalog of", fontHelvetica, 13, height - 260, grayColor);
+  drawCenteredText(store.mallName || "Broward Mall Complex", fontHelveticaBold, 18, height - 290, darkColor);
+
+  // Registration
+  drawCenteredText("is officially registered under the leasehold/proprietary holding of:", fontHelvetica, 13, height - 325, grayColor);
+
+  // Owner Name
+  drawCenteredText((store.ownerName || "CREDENTIALED OPERATOR").toUpperCase(), fontHelveticaBold, 20, height - 365, darkColor);
+
+  // Divider
+  page.drawLine({
+    start: { x: 80, y: height - 400 },
+    end: { x: width - 80, y: height - 400 },
+    color: lightGrayColor,
+    thickness: 1,
+  });
+
+  // Metadata Columns
+  const textCols = [
+    { label: "TRACKING CODE", val: store.trackingCode || "N/A", x: 80 },
+    { label: "REGISTRY LEVEL", val: store.floor || "Level 1", x: 260 },
+    { label: "REGISTRY STATUS", val: store.ownershipType || "Purchased", x: 440 },
+    {
+      label: "EXPIRARY DATE",
+      val: store.expiryDate
+        ? new Date(store.expiryDate).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })
+        : "Indefinite Allocation",
+      x: 620,
+    },
+  ];
+
+  const labelY = height - 430;
+  const valY = height - 450;
+
+  for (const col of textCols) {
+    page.drawText(col.label, {
+      x: col.x,
+      y: labelY,
+      size: 9,
+      font: fontHelveticaBold,
+      color: grayColor,
+    });
+    page.drawText(col.val, {
+      x: col.x,
+      y: valY,
+      size: 11,
+      font: fontHelveticaBold,
+      color: darkColor,
+    });
+  }
+
+  // Footer info
+  drawCenteredText("BROWARD MALL PLATFORM LEDGER", fontHelveticaBold, 11, height - 510, goldColor);
+  drawCenteredText(
+    "Cryptographically secure document synced and verifiable via proprietary routing tracking ID.",
+    fontHelveticaOblique,
+    8,
+    height - 530,
+    grayColor
+  );
+
+  const pdfBytes = await pdfDoc.save();
+  return Buffer.from(pdfBytes);
 }
 
 const app = express();
